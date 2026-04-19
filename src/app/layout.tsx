@@ -12,6 +12,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
   title: "Rubayet Hassan — Product engineer & builder",
   description:
     "A minimal portfolio: background, selected work, and a clear way to get in touch.",

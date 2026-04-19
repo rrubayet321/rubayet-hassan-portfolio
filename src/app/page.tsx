@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar } from "@/components/Avatar";
@@ -8,9 +8,10 @@ import { BulletRow } from "@/components/BulletRow";
 import { Highlight } from "@/components/Highlight";
 import { SocialLinksRow } from "@/components/SocialLinksRow";
 import { homePhotoStrip } from "@/lib/photos";
+import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
 
 export default function Home() {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const s = reduce ? 0 : 0.06;
 
   return (

@@ -19,6 +19,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  /** Avoid a second metadata route for favicon; `/favicon.ico` hits the same asset as `<link rel="icon">`. */
+  async redirects() {
+    return [
+      {
+        source: "/favicon.ico",
+        destination: "/icon.svg",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
