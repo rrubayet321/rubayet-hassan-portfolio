@@ -5,33 +5,35 @@
 html:not(.dark) {
   color-scheme: light;
 
-  --bg-base: #ffffff;
-  --bg-surface: #fafafa;
-  --bg-elevated: #f4f4f5;
-  --bg-border: #e5e5e5;
+  /* Warm off-white — not sterile hospital white */
+  --bg-base: #f8f6f2;
+  --bg-surface: #edeae3;
+  --bg-elevated: #e2dfd6;
+  --bg-border: #cac7bc;
 
-  --text-primary: #09090b;
-  --text-secondary: #3f3f46;
-  --text-muted: #71717a;
+  --text-primary: #0f0e0b;
+  --text-secondary: #383630;
+  --text-muted: #6a6860;
 
-  --accent: #18181b;
-  --accent-dim: rgba(24, 24, 27, 0.06);
+  /* Deep violet accent — ties to highlight palette, gives personality */
+  --accent: #5b21b6;
+  --accent-dim: rgba(91, 33, 182, 0.08);
 
-  --chip-bg: #f4f4f5;
-  --chip-border: #e4e4e7;
-  --chip-text: #52525b;
+  --chip-bg: #ede9fe;
+  --chip-border: #ddd6fe;
+  --chip-text: #4c1d95;
 
   /* Pastel blocks + saturated foreground (readable on white — like Shayaan’s highlights) */
   --mark-purple-bg: #ede9fe;
-  --mark-purple-fg: #5b21b6;
+  --mark-purple-fg: #4c1d95;
   --mark-blue-bg: #dbeafe;
-  --mark-blue-fg: #1e40af;
+  --mark-blue-fg: #1e3a8a;
   --mark-green-bg: #dcfce7;
-  --mark-green-fg: #166534;
+  --mark-green-fg: #14532d;
   --mark-maroon-bg: #fee2e2;
-  --mark-maroon-fg: #991b1b;
+  --mark-maroon-fg: #7f1d1d;
   --mark-orange-bg: #ffedd5;
-  --mark-orange-fg: #c2410c;
+  --mark-orange-fg: #9a3412;
 
   --mark-a-bg: var(--mark-purple-bg);
   --mark-a-fg: var(--mark-purple-fg);
@@ -44,8 +46,8 @@ html:not(.dark) {
   --mark-e-bg: var(--mark-orange-bg);
   --mark-e-fg: var(--mark-orange-fg);
 
-  /* Cleaner than dark mode — barely visible grain */
-  --grain-opacity: 0.006;
+  /* Enough grain to add texture without looking dirty */
+  --grain-opacity: 0.022;
 }
 
 /* --- Deep dark theme (default) --- */

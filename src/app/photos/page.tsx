@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { PhotoGrid } from "@/components/PhotoGrid";
 import { photos } from "@/lib/photos";
+
+export const metadata: Metadata = {
+  title: "Photos — Rubayet Hassan",
+  description: "Proof the laptop closes sometimes. Rare, documented.",
+};
 
 export default function PhotosPage() {
   return (

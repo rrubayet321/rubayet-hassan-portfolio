@@ -1,8 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { TechChip } from "@/components/TechChip";
+import Image from "next/image";
+import Link from "next/link";
+import { RichInline } from "@/components/RichInline";
+import { TechTagList } from "@/components/TechTagList";
 import type { Project } from "@/lib/projects";
 
 const typeClass: Record<
@@ -15,117 +16,110 @@ const typeClass: Record<
     "border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[var(--text-muted)]",
 };
 
+/**
+ * Shayaan-style project tile: large image first, title + tag row, copy always visible.
+ */
 export function ProjectCard({ project }: { project: Project }) {
-  const [isDesktop, setIsDesktop] = useState(true);
-  const [hover, setHover] = useState(false);
-  const [tapped, setTapped] = useState(false);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 768px)");
-    const fn = () => setIsDesktop(mql.matches);
-    fn();
-    mql.addEventListener("change", fn);
-    return () => mql.removeEventListener("change", fn);
-  }, []);
-
-  const expanded = isDesktop ? hover : tapped;
-  const motionDur = reduceMotion ? 0 : 0.22;
+  const gallery =
+    project.images && project.images.length > 0
+      ? project.images
+      : project.image
+        ? [project.image]
+        : [];
 
   return (
-    <div
-      className="border-b border-[var(--bg-border)]"
-      onMouseEnter={() => isDesktop && setHover(true)}
-      onMouseLeave={() => isDesktop && setHover(false)}
-    >
-      <div
-        role="button"
-        tabIndex={0}
-        className="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left outline-none md:cursor-default"
-        onClick={() => !isDesktop && setTapped((v) => !v)}
-        onKeyDown={(e) => {
-          if (!isDesktop && (e.key === "Enter" || e.key === " ")) {
-            e.preventDefault();
-            setTapped((v) => !v);
-          }
-        }}
-      >
-        <span className="flex min-w-0 flex-1 items-center gap-3">
-          <span className="truncate font-sans text-[var(--text-body)] font-medium text-[var(--text-primary)]">
-            {project.title}
-          </span>
-          <span
-            className={`shrink-0 rounded border px-2 py-0.5 font-mono text-[var(--text-label)] uppercase tracking-wide ${typeClass[project.type]}`}
-          >
-            {project.type}
-          </span>
-        </span>
-        <span className="shrink-0 text-[var(--text-muted)]">→</span>
-      </div>
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: motionDur, ease: "easeOut" }}
-            className="overflow-hidden"
-          >
-            <div className="bg-[var(--bg-surface)] py-4 pl-[14px] pr-2">
-              <p className="font-sans text-[var(--text-small)] text-[var(--text-secondary)]">
-                {project.subtitle}
-              </p>
-              <p className="mt-3 font-sans text-[var(--text-small)] leading-[1.7] text-[var(--text-muted)]">
-                {project.description}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.tags.map((t) => (
-                  <TechChip key={t}>{t}</TechChip>
-                ))}
-              </div>
-              <p className="mt-4 font-mono text-[var(--text-small)] text-[var(--accent)]">
-                {project.stat}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-6 font-mono text-[var(--text-small)]">
-                {project.github ? (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-secondary)] underline underline-offset-2 transition-colors duration-150 hover:text-[var(--text-primary)]"
-                  >
-                    GitHub
-                  </a>
-                ) : (
-                  <span className="text-[var(--text-muted)]">
-                    GitHub:{" "}
-                    <span className="text-[var(--text-secondary)]">
-                      Coming soon
-                    </span>
-                  </span>
-                )}
-                {project.live ? (
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-secondary)] underline underline-offset-2 transition-colors duration-150 hover:text-[var(--text-primary)]"
-                  >
-                    Live
-                  </a>
-                ) : (
-                  <span className="text-[var(--text-muted)]">
-                    Live:{" "}
-                    <span className="text-[var(--text-secondary)]">
-                      Coming soon
-                    </span>
-                  </span>
-                )}
-              </div>
+    <article className="group flex h-full min-h-0 min-w-0 flex-col gap-5">
+      {gallery.length > 0 && (
+        <div className="flex w-full shrink-0 flex-col gap-3">
+          {gallery.map((src, idx) => (
+            <div
+              key={src}
+              className="relative aspect-video w-full overflow-hidden rounded-2xl bg-[var(--bg-elevated)] ring-1 ring-[var(--bg-border)] transition duration-300 group-hover:ring-[var(--text-primary)]/20"
+            >
+              <Image
+                src={src}
+                alt={
+                  gallery.length > 1
+                    ? `${project.title} — screenshot ${idx + 1} of ${gallery.length}`
+                    : `${project.title} preview`
+                }
+                fill
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1400px) 45vw, 640px"
+                className="object-cover object-top transition duration-500 ease-out group-hover:scale-[1.01] motion-reduce:group-hover:scale-100"
+                priority={idx === 0}
+              />
             </div>
-          </motion.div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex shrink-0 items-start justify-between gap-4">
+        <h3 className="min-w-0 max-w-[75%] font-sans [font-size:var(--text-title)] font-semibold leading-[var(--leading-tight)] tracking-[-0.02em] text-[var(--text-primary)] lowercase">
+          {project.title}
+        </h3>
+        <span
+          className={`shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase leading-none tracking-wider ${typeClass[project.type]}`}
+        >
+          {project.type}
+        </span>
+      </div>
+
+      <div className="flex min-h-0 max-w-prose flex-1 flex-col gap-3 [font-size:var(--text-small)] leading-[1.65] text-[var(--text-muted)]">
+        <p className="text-[var(--text-secondary)]">
+          <RichInline text={project.subtitle} />
+        </p>
+        <p>
+          <RichInline text={project.description} />
+        </p>
+      </div>
+
+      <TechTagList tags={project.tags} className="shrink-0" />
+
+      <p className="shrink-0 font-mono text-[var(--text-caption)] text-[var(--accent)] [letter-spacing:0.02em]">
+        <RichInline text={project.stat} />
+      </p>
+
+      <div className="flex shrink-0 flex-wrap gap-6 font-mono [font-size:var(--text-label)] text-[var(--text-secondary)]">
+        {project.github ? (
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--text-secondary)] underline underline-offset-2 transition-colors duration-150 hover:text-[var(--text-primary)]"
+          >
+            GitHub
+          </a>
+        ) : (
+          <span className="text-[var(--text-muted)]">
+            GitHub:{" "}
+            <span className="text-[var(--text-secondary)]">Coming soon</span>
+          </span>
         )}
-      </AnimatePresence>
-    </div>
+        {project.live ? (
+          <a
+            href={project.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--text-secondary)] underline underline-offset-2 transition-colors duration-150 hover:text-[var(--text-primary)]"
+          >
+            Live
+          </a>
+        ) : (
+          <span className="text-[var(--text-muted)]">
+            Live:{" "}
+            <span className="text-[var(--text-secondary)]">Coming soon</span>
+          </span>
+        )}
+        {project.caseStudy && (
+          <Link
+            href={`/projects/${project.id}`}
+            className="text-[var(--accent)] underline underline-offset-2 transition-colors duration-150 hover:opacity-80"
+          >
+            case study →
+          </Link>
+        )}
+      </div>
+    </article>
   );
 }

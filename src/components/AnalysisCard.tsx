@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TechChip } from "@/components/TechChip";
+import { TechTagList } from "@/components/TechTagList";
 
 export function AnalysisCard({
   id,
@@ -30,11 +30,7 @@ export function AnalysisCard({
       <p className="mt-3 line-clamp-2 font-sans text-[0.8rem] text-[var(--text-secondary)]">
         {excerpt}
       </p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {tags.map((t) => (
-          <TechChip key={t}>{t}</TechChip>
-        ))}
-      </div>
+      <TechTagList tags={tags} className="mt-4" />
     </Link>
   );
 }

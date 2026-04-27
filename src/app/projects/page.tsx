@@ -1,22 +1,30 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { ProjectCard } from "@/components/ProjectCard";
 import { projects } from "@/lib/projects";
 import { thesisSummary } from "@/lib/thesis";
+
+export const metadata: Metadata = {
+  title: "Projects — Rubayet Hassan",
+  description: "Solo builds. Real deploys. Some have users; all have git history.",
+};
 
 export default function ProjectsPage() {
   const figure = thesisSummary.figureSrc;
 
   return (
-    <div className="mx-auto max-w-content px-6 py-14 md:pl-8">
-      <h1 className="blink font-medium tracking-[-0.01em] text-[var(--text-primary)] [font-size:var(--text-title)]">
-        things i&apos;ve shipped
-      </h1>
-      <p className="mt-4 max-w-[480px] text-[var(--text-small)] leading-relaxed text-[var(--text-muted)]">
-        solo builds. real deploys. some have users; all have git history.
-      </p>
+    <div className="mx-auto w-full max-w-wide px-6 py-14 md:px-10 md:pl-12">
+      <header className="max-w-3xl">
+        <h1 className="blink font-medium tracking-[-0.01em] text-[var(--text-primary)] [font-size:var(--text-title)]">
+          things i&apos;ve shipped
+        </h1>
+        <p className="mt-4 max-w-2xl text-[var(--text-small)] leading-relaxed text-[var(--text-muted)]">
+          solo builds. real deploys. some have users; all have git history.
+        </p>
+      </header>
 
       <section
-        className="mt-12 border-t border-[var(--bg-border)] pt-10"
+        className="mt-14 border-t border-[var(--bg-border)] pt-12"
         aria-labelledby="thesis-heading"
       >
         <h2
@@ -25,7 +33,7 @@ export default function ProjectsPage() {
         >
           research snapshot (no PDF — just the story)
         </h2>
-        <div className="mt-5 max-w-[560px] space-y-4 text-[var(--text-body)] leading-relaxed text-[var(--text-secondary)]">
+        <div className="mt-6 max-w-3xl space-y-4 text-[var(--text-body)] leading-relaxed text-[var(--text-secondary)]">
           <p>
             <strong className="text-[var(--text-primary)]">Problem.</strong>{" "}
             {thesisSummary.problem}
@@ -39,38 +47,46 @@ export default function ProjectsPage() {
             {thesisSummary.outcome}
           </p>
         </div>
-        {figure ? (
-          <figure className="mt-6 max-w-lg">
-            <div className="relative aspect-video overflow-hidden rounded-md border border-[var(--bg-border)] bg-[var(--bg-elevated)]">
+        <figure className="mt-10 w-full">
+          <div className="overflow-hidden rounded-2xl border border-[var(--bg-border)] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.55)]">
+            <Image
+              src="/projects/cmat.png"
+              alt="C-MAT architecture: MRI + EEG → Cross-Modal Attention → 4-class classification"
+              width={1280}
+              height={720}
+              className="w-full object-cover"
+            />
+          </div>
+          <figcaption className="mt-3 max-w-3xl font-mono text-[var(--text-caption)] text-[var(--text-muted)]">
+            C-MAT pipeline — structural MRI + resting-state EEG → cross-modal attention → AD / FTD / PD / Healthy
+          </figcaption>
+        </figure>
+        {figure && (
+          <figure className="mt-10 max-w-3xl">
+            <div className="relative aspect-video overflow-hidden rounded-xl border border-[var(--bg-border)] bg-[var(--bg-elevated)]">
               <Image
                 src={figure}
                 alt={thesisSummary.figureCaption}
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 100vw, 512px"
+                sizes="(max-width: 768px) 100vw, 768px"
               />
             </div>
             <figcaption className="mt-2 font-mono text-[var(--text-caption)] text-[var(--text-muted)]">
               {thesisSummary.figureCaption}
             </figcaption>
           </figure>
-        ) : (
-          <div
-            className="mt-6 max-w-lg rounded-md border border-dashed border-[var(--bg-border)] bg-[var(--bg-elevated)]/40 px-4 py-10 text-center text-[var(--text-small)] leading-relaxed text-[var(--text-muted)]"
-            role="status"
-          >
-            Figure coming — when you pick a chart or diagram, it&apos;ll live
-            under{" "}
-            <span className="text-[var(--text-secondary)]">public/thesis/</span>{" "}
-            and show here. No full thesis PDF on this site.
-          </div>
         )}
       </section>
 
-      <div className="mt-14">
-        {projects.map((p) => (
-          <ProjectCard key={p.id} project={p} />
-        ))}
+      {/* Shayaan-style: wide two-column grid, image-led tiles */}
+      <div className="mt-16 border-t border-[var(--bg-border)] pt-16">
+        <h2 className="sr-only">Products</h2>
+        <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-x-10 md:gap-y-16">
+          {projects.map((p) => (
+            <ProjectCard key={p.id} project={p} />
+          ))}
+        </div>
       </div>
     </div>
   );

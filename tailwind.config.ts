@@ -32,6 +32,8 @@ const config: Config = {
       maxWidth: {
         content: "640px",
         reading: "600px",
+        /** Wide layout for project index (grid + large screenshots) */
+        wide: "1280px",
       },
     },
   },

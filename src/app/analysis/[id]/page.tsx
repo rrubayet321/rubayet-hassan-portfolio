@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TechChip } from "@/components/TechChip";
+import { TechTagList } from "@/components/TechTagList";
 import { analyses } from "@/lib/analysis";
 
 type Props = { params: Promise<{ id: string }> };
@@ -30,11 +30,7 @@ export default async function AnalysisDetailPage({ params }: Props) {
       <p className="mt-4 font-mono text-[0.65rem] text-[var(--text-muted)]">
         {item.product} · {item.date}
       </p>
-      <div className="mt-6 flex flex-wrap gap-2">
-        {item.tags.map((t) => (
-          <TechChip key={t}>{t}</TechChip>
-        ))}
-      </div>
+      <TechTagList tags={item.tags} className="mt-6" />
       <div className="my-10 border-t border-[var(--bg-border)]" />
       <div className="space-y-6 font-sans text-[0.9rem] leading-[1.9] text-[var(--text-secondary)]">
         {paragraphs.map((para, i) => (
