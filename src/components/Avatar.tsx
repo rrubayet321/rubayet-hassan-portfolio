@@ -15,7 +15,7 @@ export function Avatar() {
       onMouseLeave={() => setHovered(false)}
     >
       <div
-        className="relative h-24 w-24 overflow-hidden rounded-xl border border-[var(--bg-border)] bg-[var(--bg-elevated)] transition-[border-color] duration-[180ms] ease-out hover:border-[var(--accent)] sm:h-28 sm:w-28"
+        className="relative h-20 w-20 overflow-hidden rounded-xl border border-[var(--bg-border)] bg-[var(--bg-elevated)] transition-[border-color] duration-[180ms] ease-out hover:border-[var(--accent)] sm:h-24 sm:w-24 md:h-28 md:w-28"
         aria-hidden
       >
         <Image
@@ -23,7 +23,7 @@ export function Avatar() {
           alt="Rubayet Hassan"
           fill
           className="object-cover object-[center_20%]"
-          sizes="(max-width: 640px) 96px, 112px"
+          sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
           priority
         />
       </div>

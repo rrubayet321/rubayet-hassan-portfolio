@@ -30,7 +30,7 @@ function PhotoCard({
         alt={photo.caption}
         width={900}
         height={1200}
-        className="h-auto w-full object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.04]"
+        className="h-auto w-full object-cover object-center transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.04] max-md:max-h-[13rem] max-md:min-h-0 md:max-h-none"
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
       />
       {/* Caption overlay — slides up on hover */}
@@ -145,9 +145,9 @@ export function PhotoGrid({ photos }: { photos: Photo[] }) {
 
   return (
     <>
-      <div className="columns-1 gap-3 sm:columns-2 lg:columns-3">
+      <div className="columns-1 gap-2 sm:columns-2 sm:gap-3 lg:columns-3">
         {photos.map((p, i) => (
-          <div key={p.src} className="mb-3 break-inside-avoid">
+          <div key={p.src} className="mb-2 break-inside-avoid sm:mb-3">
             <PhotoCard
               photo={p}
               index={i}

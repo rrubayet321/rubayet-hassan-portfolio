@@ -13,18 +13,18 @@ export default function ProjectsPage() {
   const figure = thesisSummary.figureSrc;
 
   return (
-    <div className="mx-auto w-full max-w-wide px-6 py-14 md:px-10 md:pl-12">
+    <div className="mx-auto w-full max-w-wide px-5 py-10 md:px-10 md:py-14 md:pl-12">
       <header className="max-w-3xl">
-        <h1 className="blink font-medium tracking-[-0.01em] text-[var(--text-primary)] [font-size:var(--text-title)]">
+        <h1 className="blink font-medium tracking-[-0.01em] text-[var(--text-primary)] [font-size:var(--text-title)] leading-tight">
           things i&apos;ve shipped
         </h1>
-        <p className="mt-4 max-w-2xl text-[var(--text-small)] leading-relaxed text-[var(--text-muted)]">
+        <p className="mt-3 max-w-2xl text-[var(--text-small)] leading-snug text-[var(--text-muted)] md:mt-4 md:leading-relaxed">
           solo builds. real deploys. some have users; all have git history.
         </p>
       </header>
 
       <section
-        className="mt-14 border-t border-[var(--bg-border)] pt-12"
+        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-12"
         aria-labelledby="thesis-heading"
       >
         <h2
@@ -33,7 +33,7 @@ export default function ProjectsPage() {
         >
           research snapshot (no PDF — just the story)
         </h2>
-        <div className="mt-6 max-w-3xl space-y-4 text-[var(--text-body)] leading-relaxed text-[var(--text-secondary)]">
+        <div className="mt-4 max-w-3xl space-y-3 text-[var(--text-body)] leading-snug text-[var(--text-secondary)] md:mt-6 md:space-y-4 md:leading-relaxed">
           <p>
             <strong className="text-[var(--text-primary)]">Problem.</strong>{" "}
             {thesisSummary.problem}
@@ -80,9 +80,9 @@ export default function ProjectsPage() {
       </section>
 
       {/* Shayaan-style: wide two-column grid, image-led tiles */}
-      <div className="mt-16 border-t border-[var(--bg-border)] pt-16">
+      <div className="mt-10 border-t border-[var(--bg-border)] pt-10 md:mt-16 md:pt-16">
         <h2 className="sr-only">Products</h2>
-        <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-x-10 md:gap-y-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-x-10 md:gap-y-16">
           {projects.map((p) => (
             <ProjectCard key={p.id} project={p} />
           ))}

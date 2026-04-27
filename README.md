@@ -1,76 +1,90 @@
 # Rubayet Hassan — Portfolio
 
-Personal portfolio built with Next.js 15, React 19, Tailwind CSS v4, and Framer Motion. Dark-default, minimal, color-highlighted.
+Source for [rubayethassan.com](https://rubayethassan.com). A Next.js App Router site: dark-first UI, command palette navigation, and content driven from TypeScript modules under `src/lib/`.
 
-## Getting started
+## Tech stack
+
+- **Framework:** Next.js 15 (App Router)
+- **UI:** React 19, Tailwind CSS v4, Framer Motion
+- **Theming:** `next-themes` (light / dark)
+
+## Requirements
+
+- Node.js 20+
+- npm (or compatible client)
+
+## Setup
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in your values
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your values (see below), then:
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+App runs at [http://localhost:3000](http://localhost:3000).
+
+### Useful scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Development server (webpack) |
+| `npm run dev:turbo` | Development with Turbopack |
+| `npm run dev:clean` | Remove `.next` then start dev (if build cache is corrupt) |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build locally |
+| `npm run lint` | ESLint |
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local` and set:
+| Variable | Required for production | Description |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Yes | Canonical site URL, no trailing slash (e.g. `https://rubayethassan.com`). Used for metadata and absolute links. |
+| `NEXT_PUBLIC_GA_ID` | No | Google Analytics 4 measurement ID. If unset, analytics scripts are not loaded. |
 
-| Variable | Required | Description |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | Yes (for prod) | Your deployed URL, no trailing slash. e.g. `https://rubayethassan.com` |
-| `NEXT_PUBLIC_GA_ID` | No | Google Analytics 4 Measurement ID (e.g. `G-XXXXXXXXXX`). Omit entirely to disable analytics — no script ships without this. |
+## Content and data
 
-## Content checklist — drop your real files here
+Copy and page copy live in `src/lib/*.ts` (projects, about, analysis, uses, photos, now, etc.). Update those files to change what appears on the site.
 
-Before deploying, replace these placeholders:
+| Area | Primary file |
+| --- | --- |
+| Home “now” strip | `src/lib/now.ts` |
+| About | `src/lib/about.ts` |
+| Projects and case studies | `src/lib/projects.ts` |
+| Analysis / notes | `src/lib/analysis.ts` |
+| Uses / stack | `src/lib/uses.ts` |
+| Photo captions | `src/lib/photos.ts` |
 
-- [ ] **Resume PDF** — overwrite `public/Rubayet_Hassan_Resume.pdf` with your actual PDF
-- [ ] **Photos** — replace `public/photos/01.jpg` through `12.jpg` with your real photos. Captions live in `src/lib/photos.ts`
+**Static assets:** place files under `public/` (e.g. resume PDF, project screenshots, `public/photos/*`). Rich text in some fields supports inline markers (see comments in `src/lib/projects.ts` and `src/components/RichInline.tsx`).
 
-## Site map
+## Routes
 
-| Route | Source |
-|---|---|
-| `/` | `src/app/page.tsx` — home, "now" strip, photo strip |
-| `/about` | `src/app/about/page.tsx` + `src/lib/about.ts` |
-| `/projects` | `src/app/projects/page.tsx` — expandable project cards |
-| `/projects/[id]` | `src/app/projects/[id]/page.tsx` — case study detail |
-| `/analysis` | `src/app/analysis/page.tsx` — product notes list |
-| `/analysis/[id]` | `src/app/analysis/[id]/page.tsx` — note detail |
-| `/uses` | `src/app/uses/page.tsx` + `src/lib/uses.ts` |
-| `/photos` | `src/app/photos/page.tsx` — masonry grid |
-| `/contact` | `src/app/contact/page.tsx` — copy email + form |
-| `/resume` | `src/app/resume/page.tsx` — embedded PDF viewer |
+| Path | Description |
+| --- | --- |
+| `/` | Home |
+| `/about` | About |
+| `/projects` | Project index |
+| `/projects/[id]` | Case study (where defined) |
+| `/analysis`, `/analysis/[id]` | Product notes |
+| `/uses` | Stack / tools |
+| `/photos` | Photo grid |
+| `/contact` | Contact |
+| `/resume` | Resume download / link |
 
-## Content files (update these to keep the site fresh)
-
-| File | What it controls |
-|---|---|
-| `src/lib/now.ts` | "what I'm doing now" strip on the home page — update monthly |
-| `src/lib/about.ts` | Bio, education, experience, competitions, languages, philosophy |
-| `src/lib/projects.ts` | Project cards + case studies |
-| `src/lib/analysis.ts` | Product notes / teardowns |
-| `src/lib/uses.ts` | Stack with editorial notes |
-| `src/lib/photos.ts` | Photo captions |
-
-## Builder easter eggs
-
-- **⌘K** — command palette: jump to any page, copy email, toggle theme, download resume
-- **?** — keyboard shortcuts overlay
-- **3× click on RH monogram** — "you found me. probably at the gym."
-- **Konami code** — up up down down left right left right B A
-
-## Deploy
+## Deployment
 
 ```bash
 npm run build
 ```
 
-Deploy to Vercel in one command:
+Deploy on [Vercel](https://vercel.com) or any host that supports Next.js. Set `NEXT_PUBLIC_SITE_URL` to your production domain in the host’s environment variables.
 
-```bash
-npx vercel
-```
+## Shortcuts (in the running app)
 
-Set `NEXT_PUBLIC_SITE_URL` in your Vercel project environment variables to your production domain.
+- **⌘K** / **Ctrl+K** — command palette (navigation and quick actions)
+- **?** — shortcut help overlay
+- **Esc** — close modals / palette

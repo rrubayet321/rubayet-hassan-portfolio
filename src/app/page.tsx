@@ -14,7 +14,7 @@ function SectionLink({ href, children }: { href: string; children: React.ReactNo
   return (
     <Link
       href={href}
-      className="group mt-3 inline-flex items-center gap-1.5 font-mono text-[var(--text-small)] text-[var(--accent)] transition-opacity duration-150 hover:opacity-70"
+      className="group mt-2.5 inline-flex items-center gap-1.5 font-mono text-[var(--text-small)] text-[var(--accent)] transition-opacity duration-150 hover:opacity-70 md:mt-3"
     >
       <span>{children}</span>
       <span className="inline-block transition-transform duration-150 group-hover:translate-x-1">
@@ -42,7 +42,7 @@ function NameWithMeaning({ reduce, delay }: { reduce: boolean; delay: number }) 
   return (
     <div ref={ref} className="relative w-fit">
       <motion.h1
-        className="cursor-pointer text-[clamp(2.75rem,6vw+0.5rem,3.5rem)] font-medium tracking-[-0.03em] text-[var(--text-primary)] md:text-[clamp(2.95rem,4.5vw+1rem,3.75rem)]"
+        className="cursor-pointer text-[clamp(1.75rem,7vw+0.2rem,2.4rem)] font-medium tracking-[-0.03em] text-[var(--text-primary)] sm:text-[clamp(2.1rem,5vw,2.75rem)] md:text-[clamp(2.95rem,4.5vw+1rem,3.75rem)]"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay }}
@@ -100,7 +100,7 @@ export default function Home() {
   const s = reduce ? 0 : 0.06;
 
   return (
-    <div className="mx-auto flex max-w-content flex-col px-6 py-[60px] md:px-6">
+    <div className="mx-auto flex max-w-content flex-col px-5 py-10 md:px-6 md:py-[60px]">
       <motion.div
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -109,12 +109,12 @@ export default function Home() {
         <Avatar />
       </motion.div>
 
-      <div className="mt-8">
+      <div className="mt-6 md:mt-8">
         <NameWithMeaning reduce={reduce} delay={1 * s} />
       </div>
 
       <motion.p
-        className="mt-3 max-w-lg text-[var(--text-small)] leading-relaxed tracking-[0.02em] text-[var(--text-secondary)]"
+        className="mt-2.5 max-w-lg text-[var(--text-small)] leading-snug tracking-[0.02em] text-[var(--text-secondary)] md:mt-3 md:leading-relaxed"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 2 * s }}
@@ -132,7 +132,7 @@ export default function Home() {
       </motion.div>
 
       <motion.p
-        className="mt-4 max-w-lg text-[var(--text-body)] leading-relaxed text-[var(--text-secondary)]"
+        className="mt-3 max-w-lg text-[var(--text-body)] leading-[1.55] text-[var(--text-secondary)] md:mt-4 md:leading-relaxed"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 2.5 * s }}
@@ -142,7 +142,7 @@ export default function Home() {
         </span>
       </motion.p>
 
-      <div className="mt-10 flex flex-col gap-5">
+      <div className="mt-8 flex flex-col gap-3.5 md:mt-10 md:gap-5">
         <BulletRow delay={3 * s}>
           <>
             <strong className="text-[var(--text-primary)]">
@@ -224,7 +224,7 @@ export default function Home() {
 
       {/* Now strip */}
       <motion.div
-        className="mt-14 border-t border-[var(--bg-border)] pt-10"
+        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-10"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 8 * s }}
@@ -238,11 +238,11 @@ export default function Home() {
             · {now.date}
           </span>
         </p>
-        <ul className="mt-4 flex flex-col gap-1">
+        <ul className="mt-3 flex flex-col gap-0.5 md:mt-4 md:gap-1">
           {now.items.map((item, i) => (
             <li
               key={i}
-              className="group flex gap-2 rounded-md px-2 py-1.5 -mx-2 text-[var(--text-small)] leading-relaxed text-[var(--text-muted)] transition-colors duration-150 hover:bg-[var(--bg-surface)] hover:text-[var(--text-secondary)]"
+              className="group flex gap-2 rounded-md px-2 py-1 -mx-2 text-[var(--text-small)] leading-snug text-[var(--text-muted)] transition-colors duration-150 hover:bg-[var(--bg-surface)] hover:text-[var(--text-secondary)] md:py-1.5 md:leading-relaxed"
             >
               <span className="shrink-0 font-mono text-[var(--accent)] transition-transform duration-150 group-hover:translate-x-0.5">↳</span>
               <span>{item}</span>
@@ -252,7 +252,7 @@ export default function Home() {
       </motion.div>
 
       <motion.div
-        className="mt-14 border-t border-[var(--bg-border)] pt-10"
+        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-10"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 9 * s }}
@@ -267,7 +267,7 @@ export default function Home() {
       </motion.div>
 
       <motion.div
-        className="mt-14 border-t border-[var(--bg-border)] pt-10"
+        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-10"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 10 * s }}
