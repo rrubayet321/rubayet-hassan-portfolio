@@ -42,8 +42,7 @@ function NameWithMeaning({ reduce, delay }: { reduce: boolean; delay: number }) 
   return (
     <div ref={ref} className="relative w-fit">
       <motion.h1
-        className="cursor-pointer font-medium tracking-[-0.025em] text-[var(--text-primary)]"
-        style={{ fontSize: "var(--text-display)" }}
+        className="cursor-pointer text-[clamp(2.75rem,6vw+0.5rem,3.5rem)] font-medium tracking-[-0.03em] text-[var(--text-primary)] md:text-[clamp(2.95rem,4.5vw+1rem,3.75rem)]"
         initial={reduce ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay }}

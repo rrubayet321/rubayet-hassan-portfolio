@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { profileImageSrc } from "@/lib/profile";
 
 export function Avatar() {
   const [hovered, setHovered] = useState(false);
@@ -13,10 +15,17 @@ export function Avatar() {
       onMouseLeave={() => setHovered(false)}
     >
       <div
-        className="flex h-[68px] w-[68px] items-center justify-center rounded-lg border border-[var(--bg-border)] bg-[var(--bg-elevated)] font-mono text-base text-[var(--accent)] transition-[border-color] duration-[180ms] ease-out hover:border-[var(--accent)]"
+        className="relative h-24 w-24 overflow-hidden rounded-xl border border-[var(--bg-border)] bg-[var(--bg-elevated)] transition-[border-color] duration-[180ms] ease-out hover:border-[var(--accent)] sm:h-28 sm:w-28"
         aria-hidden
       >
-        RH
+        <Image
+          src={profileImageSrc}
+          alt="Rubayet Hassan"
+          fill
+          className="object-cover object-[center_20%]"
+          sizes="(max-width: 640px) 96px, 112px"
+          priority
+        />
       </div>
       <AnimatePresence>
         {hovered && (
