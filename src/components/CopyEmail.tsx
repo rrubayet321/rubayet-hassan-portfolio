@@ -3,8 +3,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { IconCheck, IconCopy } from "@/components/icons";
+import { profile } from "@/lib/profile";
 
-const EMAIL = "rrubayet321@gmail.com";
+const EMAIL = profile.email;
 
 export function CopyEmail() {
   const [copied, setCopied] = useState(false);

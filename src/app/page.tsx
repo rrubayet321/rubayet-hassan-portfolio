@@ -148,10 +148,9 @@ export default function Home() {
             <strong className="text-[var(--text-primary)]">
               Think in products, ship in code.
             </strong>{" "}
-            Before the schema, there&apos;s a user. Before the function,
-            there&apos;s a metric. Before the deploy, there&apos;s a{" "}
-            <em>&ldquo;does this need to exist?&rdquo;</em> — most engineers
-            skip that question.{" "}
+            Before code: user, metric, and{" "}
+            <em>&ldquo;does this need to exist?&rdquo;</em> — most engineers skip
+            that question.{" "}
             <span className="text-[var(--text-muted)]">
               I&apos;ve learned not to.
             </span>
@@ -205,9 +204,17 @@ export default function Home() {
               Credibility that stuck:
             </strong>{" "}
             TA&apos;d Python and biology at{" "}
-            <Highlight variant="orange">Vertical Horizon</Highlight> — recursion for
-            people who&apos;d never touched a semicolon. Harder than a clean
-            deploy; worse logs.
+            <Highlight variant="orange">Vertical Horizon</Highlight>; built{" "}
+            <Link
+              href="https://bracu-network.vercel.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="transition-opacity hover:opacity-80"
+            >
+              <Highlight variant="blue">bracu.network</Highlight>
+            </Link>{" "}
+            so BRACU people can network without making LinkedIn their whole
+            personality.
           </>
         </BulletRow>
 

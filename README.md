@@ -48,7 +48,7 @@ App runs at [http://localhost:3000](http://localhost:3000).
 
 ## Content and data
 
-Copy and page copy live in `src/lib/*.ts` (projects, about, analysis, uses, photos, now, etc.). Update those files to change what appears on the site.
+Copy and page copy live in `src/lib/*.ts` (projects, about, analysis, photos, now, etc.). Update those files to change what appears on the site.
 
 | Area | Primary file |
 | --- | --- |
@@ -56,7 +56,6 @@ Copy and page copy live in `src/lib/*.ts` (projects, about, analysis, uses, phot
 | About | `src/lib/about.ts` |
 | Projects and case studies | `src/lib/projects.ts` |
 | Analysis / notes | `src/lib/analysis.ts` |
-| Uses / stack | `src/lib/uses.ts` |
 | Photo captions | `src/lib/photos.ts` |
 
 **Static assets:** place files under `public/` (e.g. resume PDF, project screenshots, `public/photos/*`). Rich text in some fields supports inline markers (see comments in `src/lib/projects.ts` and `src/components/RichInline.tsx`).
@@ -70,7 +69,6 @@ Copy and page copy live in `src/lib/*.ts` (projects, about, analysis, uses, phot
 | `/projects` | Project index |
 | `/projects/[id]` | Case study (where defined) |
 | `/analysis`, `/analysis/[id]` | Product notes |
-| `/uses` | Stack / tools |
 | `/photos` | Photo grid |
 | `/contact` | Contact |
 | `/resume` | Resume download / link |

@@ -7,6 +7,7 @@ import {
   IconLinkedIn,
   IconMail,
 } from "@/components/icons";
+import { profile } from "@/lib/profile";
 
 export const metadata: Metadata = {
   title: "Contact — Rubayet Hassan",
@@ -16,17 +17,17 @@ export const metadata: Metadata = {
 
 const socialLinks = [
   {
-    href: "https://github.com/rrubayet321",
+    href: profile.github,
     label: "GitHub",
     Icon: IconGitHub,
   },
   {
-    href: "https://www.linkedin.com/in/rubayet-hassan2",
+    href: profile.linkedin,
     label: "LinkedIn",
     Icon: IconLinkedIn,
   },
   {
-    href: "mailto:rrubayet321@gmail.com",
+    href: `mailto:${profile.email}`,
     label: "Email",
     Icon: IconMail,
   },

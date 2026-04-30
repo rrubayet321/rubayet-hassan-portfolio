@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:turbo": "next dev --turbo",
-    "dev:clean": "rm -rf .next && next dev",
+    "predev": "lsof -ti:3000 -sTCP:LISTEN | xargs kill -9 2>/dev/null; exit 0",
+    "dev": "WATCHPACK_POLLING=true next dev -H 127.0.0.1 -p 3000",
+    "dev:turbo": "WATCHPACK_POLLING=true next dev -H 127.0.0.1 -p 3000 --turbo",
+    "dev:clean": "npm run clean && npm run dev",
     "clean": "rm -rf .next",
     "build": "next build",
     "start": "next start",

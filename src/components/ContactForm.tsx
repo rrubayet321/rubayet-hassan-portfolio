@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { profile } from "@/lib/profile";
 
 export function ContactForm() {
   const [sent, setSent] = useState(false);
@@ -14,7 +15,7 @@ export function ContactForm() {
     const message = String(data.get("message") ?? "");
     const subject = encodeURIComponent(`Portfolio: ${name}`);
     const body = encodeURIComponent(`${message}\n\n— ${email}`);
-    window.location.href = `mailto:rrubayet321@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
     setSent(true);
   }
 
@@ -45,7 +46,7 @@ export function ContactForm() {
       </button>
       {sent && (
         <p className="font-mono text-[var(--text-small)] text-[var(--accent)]">
-          sent. i&apos;ll get back to you.
+          opening your mail client&hellip;
         </p>
       )}
     </form>

@@ -2,8 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
+import { profile } from "@/lib/profile";
 import {
   IconCamera,
   IconChart,
@@ -16,7 +17,6 @@ import {
   IconMail,
   IconSearch,
   IconSun,
-  IconTerminal,
   IconUser,
 } from "@/components/icons";
 
@@ -43,66 +43,68 @@ export function CommandPalette() {
     setSelected(0);
   }, []);
 
-  const commands: Command[] = [
-    { id: "home", group: "navigate", label: "home", Icon: IconHome, action: () => { router.push("/"); close(); } },
-    { id: "projects", group: "navigate", label: "projects", Icon: IconFolder, action: () => { router.push("/projects"); close(); } },
-    { id: "analysis", group: "navigate", label: "analysis", Icon: IconChart, action: () => { router.push("/analysis"); close(); } },
-    { id: "about", group: "navigate", label: "about", Icon: IconUser, action: () => { router.push("/about"); close(); } },
-    { id: "uses", group: "navigate", label: "uses", Icon: IconTerminal, action: () => { router.push("/uses"); close(); } },
-    { id: "photos", group: "navigate", label: "photos", Icon: IconCamera, action: () => { router.push("/photos"); close(); } },
-    { id: "contact", group: "navigate", label: "contact", Icon: IconMail, action: () => { router.push("/contact"); close(); } },
-    { id: "resume", group: "navigate", label: "resume", Icon: IconFile, action: () => { router.push("/resume"); close(); } },
-    {
-      id: "copy-email",
-      group: "actions",
-      label: "copy email address",
-      hint: "rrubayet321@gmail.com",
-      Icon: IconMail,
-      action: () => {
-        navigator.clipboard.writeText("rrubayet321@gmail.com").catch(() => {});
-        close();
+  const commands: Command[] = useMemo(
+    () => [
+      { id: "home", group: "navigate", label: "home", Icon: IconHome, action: () => { router.push("/"); close(); } },
+      { id: "projects", group: "navigate", label: "projects", Icon: IconFolder, action: () => { router.push("/projects"); close(); } },
+      { id: "analysis", group: "navigate", label: "analysis", Icon: IconChart, action: () => { router.push("/analysis"); close(); } },
+      { id: "about", group: "navigate", label: "about", Icon: IconUser, action: () => { router.push("/about"); close(); } },
+      { id: "photos", group: "navigate", label: "photos", Icon: IconCamera, action: () => { router.push("/photos"); close(); } },
+      { id: "contact", group: "navigate", label: "contact", Icon: IconMail, action: () => { router.push("/contact"); close(); } },
+      { id: "resume", group: "navigate", label: "resume", Icon: IconFile, action: () => { router.push("/resume"); close(); } },
+      {
+        id: "copy-email",
+        group: "actions",
+        label: "copy email address",
+        hint: profile.email,
+        Icon: IconMail,
+        action: () => {
+          navigator.clipboard.writeText(profile.email).catch(() => {});
+          close();
+        },
       },
-    },
-    {
-      id: "download-resume",
-      group: "actions",
-      label: "download resume",
-      Icon: IconDownload,
-      action: () => {
-        const a = document.createElement("a");
-        a.href = "/Rubayet_Hassan_Resume.pdf";
-        a.download = "Rubayet_Hassan_Resume.pdf";
-        a.click();
-        close();
+      {
+        id: "download-resume",
+        group: "actions",
+        label: "download resume",
+        Icon: IconDownload,
+        action: () => {
+          const a = document.createElement("a");
+          a.href = "/Rubayet_Hassan_Resume.pdf";
+          a.download = "Rubayet_Hassan_Resume.pdf";
+          a.click();
+          close();
+        },
       },
-    },
-    {
-      id: "toggle-theme",
-      group: "actions",
-      label: resolvedTheme === "dark" ? "switch to light mode" : "switch to dark mode",
-      Icon: IconSun,
-      action: () => {
-        setTheme(resolvedTheme === "dark" ? "light" : "dark");
-        close();
+      {
+        id: "toggle-theme",
+        group: "actions",
+        label: resolvedTheme === "dark" ? "switch to light mode" : "switch to dark mode",
+        Icon: IconSun,
+        action: () => {
+          setTheme(resolvedTheme === "dark" ? "light" : "dark");
+          close();
+        },
       },
-    },
-    {
-      id: "github",
-      group: "links",
-      label: "open github",
-      hint: "github.com/rrubayet321",
-      Icon: IconGitHub,
-      action: () => { window.open("https://github.com/rrubayet321", "_blank", "noopener"); close(); },
-    },
-    {
-      id: "linkedin",
-      group: "links",
-      label: "open linkedin",
-      hint: "linkedin.com/in/rubayet-hassan2",
-      Icon: IconLinkedIn,
-      action: () => { window.open("https://www.linkedin.com/in/rubayet-hassan2", "_blank", "noopener"); close(); },
-    },
-  ];
+      {
+        id: "github",
+        group: "links",
+        label: "open github",
+        hint: "github.com/rrubayet321",
+        Icon: IconGitHub,
+        action: () => { window.open(profile.github, "_blank", "noopener"); close(); },
+      },
+      {
+        id: "linkedin",
+        group: "links",
+        label: "open linkedin",
+        hint: "linkedin.com/in/rubayet-hassan2",
+        Icon: IconLinkedIn,
+        action: () => { window.open(profile.linkedin, "_blank", "noopener"); close(); },
+      },
+    ],
+    [router, resolvedTheme, setTheme, close],
+  );
 
   const filtered = query.trim()
     ? commands.filter(

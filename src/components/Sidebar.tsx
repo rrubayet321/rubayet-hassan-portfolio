@@ -5,28 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  IconCamera,
-  IconChart,
-  IconFile,
-  IconFolder,
-  IconHome,
-  IconMail,
   IconMenu,
-  IconTerminal,
-  IconUser,
   IconX,
 } from "@/components/icons";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const nav = [
-  { href: "/", label: "home", Icon: IconHome },
-  { href: "/projects", label: "projects", Icon: IconFolder },
-  { href: "/analysis", label: "analysis", Icon: IconChart },
-  { href: "/about", label: "about", Icon: IconUser },
-  { href: "/uses", label: "uses", Icon: IconTerminal },
-  { href: "/photos", label: "photos", Icon: IconCamera },
-  { href: "/contact", label: "contact", Icon: IconMail },
-  { href: "/resume", label: "resume", Icon: IconFile },
+  { href: "/", label: "home" },
+  { href: "/projects", label: "projects" },
+  { href: "/analysis", label: "analysis" },
+  { href: "/about", label: "about" },
+  { href: "/photos", label: "photos" },
+  { href: "/contact", label: "contact" },
+  { href: "/resume", label: "resume" },
 ] as const;
 
 function isActive(pathname: string, href: string) {
@@ -137,15 +128,14 @@ export function Sidebar() {
           className={
             isMobileDrawer
               ? "flex flex-1 flex-col gap-0.5 px-2 pb-6 pt-1"
-              : "flex flex-col items-center gap-2 overflow-visible px-2 pb-6"
+              : "flex flex-col items-start gap-5 overflow-visible px-4 pb-6 pt-4"
           }
         >
-          {nav.map(({ href, label, Icon }) => (
-            <NavIconLink
+          {nav.map(({ href, label }) => (
+            <NavTextLink
               key={href}
               href={href}
               label={label}
-              Icon={Icon}
               active={isActive(pathname, href)}
               onNavigate={onNavigate}
               layoutBar={layoutBar}
@@ -183,7 +173,7 @@ export function Sidebar() {
       </header>
 
       {/* Desktop sidebar */}
-      <aside className="fixed left-0 top-0 z-[80] hidden h-screen w-[60px] flex-col overflow-visible border-r border-[var(--bg-border)] bg-[var(--bg-base)]/90 backdrop-blur-xl md:flex shadow-[inset_-1px_0_0_rgba(0,0,0,0.04)] dark:shadow-[inset_-1px_0_0_rgba(255,255,255,0.03)]">
+      <aside className="fixed left-0 top-0 z-[80] hidden h-screen w-[136px] flex-col overflow-visible border-r border-[var(--bg-border)] bg-[var(--bg-base)]/90 backdrop-blur-xl md:flex shadow-[inset_-1px_0_0_rgba(0,0,0,0.04)] dark:shadow-[inset_-1px_0_0_rgba(255,255,255,0.03)]">
         <NavColumn layoutBar />
       </aside>
 
@@ -240,10 +230,9 @@ export function Sidebar() {
   );
 }
 
-function NavIconLink({
+function NavTextLink({
   href,
   label,
-  Icon,
   active,
   onNavigate,
   layoutBar,
@@ -251,30 +240,23 @@ function NavIconLink({
 }: {
   href: string;
   label: string;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   active: boolean;
   onNavigate?: () => void;
   layoutBar: boolean;
   isMobileDrawer?: boolean;
 }) {
-  const [hover, setHover] = useState(false);
-
   if (isMobileDrawer) {
     return (
       <Link
         href={href}
         onClick={onNavigate}
         aria-current={active ? "page" : undefined}
-        className={`flex min-h-12 w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-150 ${
+        className={`flex min-h-12 w-full items-center rounded-xl px-3 py-2.5 text-left transition-colors duration-150 ${
           active
             ? "bg-[var(--bg-elevated)] text-[var(--accent)] ring-1 ring-[var(--bg-border)]"
             : "text-[var(--text-primary)] active:bg-[var(--bg-surface)]"
         }`}
       >
-        <Icon
-          className={`h-5 w-5 shrink-0 ${active ? "text-[var(--accent)]" : "text-[var(--text-muted)]"}`}
-          aria-hidden
-        />
         <span className="min-w-0 font-sans text-[var(--text-small)] font-medium leading-snug">
           {label}
         </span>
@@ -283,19 +265,15 @@ function NavIconLink({
   }
 
   return (
-    <div
-      className="relative w-full"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <div className="relative w-full">
       <Link
         href={href}
         onClick={onNavigate}
         title={label}
         aria-current={active ? "page" : undefined}
-        className={`relative flex h-10 w-full items-center justify-center rounded-xl transition-all duration-150 ${
+        className={`relative flex w-full items-center rounded-lg px-3 py-2.5 font-sans text-[var(--text-small)] leading-none transition-colors duration-150 ${
           active
-            ? "bg-[var(--bg-elevated)] text-[var(--accent)] shadow-[0_0_0_1px_var(--bg-border)]"
+            ? "bg-[var(--bg-elevated)] text-[var(--text-primary)] shadow-[0_0_0_1px_var(--bg-border)]"
             : "text-[var(--text-muted)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]"
         }`}
       >
@@ -309,23 +287,8 @@ function NavIconLink({
         {active && !layoutBar && (
           <span className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-[var(--accent)]" />
         )}
-        <Icon className="relative z-[1] h-4 w-4" />
+        <span className="relative z-[1]">{label}</span>
       </Link>
-
-      <AnimatePresence>
-        {hover && (
-          <motion.span
-            initial={{ opacity: 0, x: -6, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -6, scale: 0.95 }}
-            transition={{ duration: 0.12, ease: "easeOut" }}
-            className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[200] hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-[var(--bg-border)] bg-[var(--bg-elevated)] px-2.5 py-1.5 font-mono text-[11px] text-[var(--text-secondary)] shadow-lg md:block"
-          >
-            {label}
-            <span className="absolute left-[-4px] top-1/2 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-[var(--bg-border)]" />
-          </motion.span>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

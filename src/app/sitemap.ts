@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/projects`, lastModified: new Date(), priority: 0.9 },
     { url: `${siteUrl}/analysis`, lastModified: new Date(), priority: 0.9 },
     { url: `${siteUrl}/about`, lastModified: new Date(), priority: 0.8 },
-    { url: `${siteUrl}/uses`, lastModified: new Date(), priority: 0.7 },
     { url: `${siteUrl}/photos`, lastModified: new Date(), priority: 0.6 },
     { url: `${siteUrl}/contact`, lastModified: new Date(), priority: 0.7 },
     { url: `${siteUrl}/resume`, lastModified: new Date(), priority: 0.7 },

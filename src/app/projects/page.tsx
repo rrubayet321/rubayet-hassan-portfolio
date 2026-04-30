@@ -47,14 +47,14 @@ export default function ProjectsPage() {
             {thesisSummary.outcome}
           </p>
         </div>
-        <figure className="mt-10 w-full">
-          <div className="overflow-hidden rounded-2xl border border-[var(--bg-border)] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.55)]">
+        <figure className="mx-auto mt-10 w-full max-w-[640px]">
+          <div className="mx-auto w-full overflow-hidden rounded-2xl border border-[var(--bg-border)] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.55)]">
             <Image
               src="/projects/cmat.png"
               alt="C-MAT architecture: MRI + EEG → Cross-Modal Attention → 4-class classification"
               width={1280}
               height={720}
-              className="w-full object-cover"
+              className="h-auto w-full object-contain"
             />
           </div>
           <figcaption className="mt-3 max-w-3xl font-mono text-[var(--text-caption)] text-[var(--text-muted)]">

@@ -1,4 +1,15 @@
-export const analyses = [
+export type Analysis = {
+  id: string;
+  title: string;
+  product: string;
+  date: string;
+  tags: string[];
+  excerpt: string;
+  body: string;
+  relatedProject: { label: string; href: string };
+};
+
+export const analyses: Analysis[] = [
   {
     id: "youtube-analytics-gap",
     title: "Why YouTube has no native competitor analytics",

@@ -28,9 +28,6 @@ export function SiteFooter() {
               </span>
             ))}
           </nav>
-          <p className="font-mono text-[0.7rem] leading-[1.5] text-[var(--text-muted)] sm:text-[var(--text-caption)]">
-            still here. still building.
-          </p>
         </div>
         <p className="mt-5 border-t border-[var(--bg-border)] pt-4 font-sans text-[0.65rem] leading-snug text-[var(--text-muted)]/80 sm:text-[0.6875rem]">
           © {new Date().getFullYear()} Rubayet Hassan. All rights reserved.

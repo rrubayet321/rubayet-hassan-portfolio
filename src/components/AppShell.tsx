@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <SiteTopBar />
       <CommandPalette />
       <KeyboardHints />
-      <div className="flex min-h-screen flex-col pt-14 md:ml-16 md:pt-11">
+      <div className="flex min-h-screen flex-col pt-14 md:ml-[136px] md:pt-11">
         <main className="flex flex-1 flex-col">
           <PageTransition>{children}</PageTransition>
         </main>
