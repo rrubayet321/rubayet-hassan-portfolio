@@ -1,10 +1,6 @@
 "use client";
-
-/**
- * Renders when the root layout fails. Must include html/body; global CSS may not load.
- */
+import Link from "next/link";
 export default function GlobalError({
-  error,
   reset,
 }: {
   error: Error & { digest?: string };
@@ -16,39 +12,36 @@ export default function GlobalError({
         style={{
           margin: 0,
           minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "#0D0F10",
+          color: "#F2EEE7",
+          display: "grid",
+          placeItems: "center",
           padding: 24,
           fontFamily: "system-ui, sans-serif",
-          background: "#030305",
-          color: "#f4f4f8",
         }}
       >
-        <div style={{ textAlign: "center", maxWidth: 420 }}>
-          <h1 style={{ fontSize: "1.125rem", fontWeight: 600, margin: 0 }}>
-            Something went wrong
-          </h1>
-          <p style={{ color: "#a1a1aa", fontSize: "0.875rem", marginTop: 12 }}>
-            {process.env.NODE_ENV === "development" ? error.message : "An unexpected error occurred."}
-          </p>
+        <main style={{ maxWidth: 520 }}>
+          <p style={{ color: "#DCA77C" }}>Something went wrong</p>
+          <h1>A small interruption.</h1>
+          <p>Please try again, or return to the homepage.</p>
           <button
             type="button"
             onClick={reset}
             style={{
-              marginTop: 20,
-              padding: "10px 18px",
+              padding: "12px 20px",
+              borderRadius: 4,
+              border: 0,
+              background: "#DCA77C",
+              color: "#0D0F10",
               cursor: "pointer",
-              background: "#121218",
-              color: "#f4f4f8",
-              border: "1px solid #27272f",
-              borderRadius: 8,
-              fontSize: "0.875rem",
             }}
           >
             Try again
           </button>
-        </div>
+          <Link href="/" style={{ color: "#F2EEE7", marginLeft: 24 }}>
+            Go home
+          </Link>
+        </main>
       </body>
     </html>
   );

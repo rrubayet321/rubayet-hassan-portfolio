@@ -40,3 +40,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local verification artifacts
+/playwright-report/
+/test-results/
+/artifacts/

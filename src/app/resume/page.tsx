@@ -1,74 +1,54 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CopyResumeLink } from "@/components/CopyResumeLink";
-
+import { Arrow } from "@/components/Mark";
+import { siteUrl } from "@/lib/profile";
 export const metadata: Metadata = {
-  title: "Resume — Rubayet Hassan",
-  description: "Download or view Rubayet Hassan's resume.",
+  title: "Resume",
+  description: "View or download Rubayet Hassan's existing resume PDF.",
+  alternates: { canonical: "/resume" },
+  robots: { index: false, follow: true },
 };
-
-const RESUME_PDF = "/Rubayet_Hassan_Resume.pdf";
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://rubayethassan.com";
-
+const pdf = "/Rubayet_Hassan_Resume.pdf";
 export default function ResumePage() {
-  const shareUrl = `${SITE_ORIGIN}/resume`;
-
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-14 md:pl-8">
-
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <h1
-          className="font-medium tracking-[-0.025em] text-[var(--text-primary)]"
-          style={{ fontSize: "var(--text-display)" }}
-        >
-          resume
+    <div className="shell inner-page resume-page">
+      <header className="page-heading">
+        <p className="eyebrow">Document / Resume</p>
+        <h1>
+          The <span className="serif">details.</span>
         </h1>
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          <a
-            href={RESUME_PDF}
-            download="Rubayet_Hassan_Resume.pdf"
-            className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2 font-mono text-[var(--text-caption)] text-white transition-opacity duration-150 hover:opacity-85"
-          >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden>
-              <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 13h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            download pdf
-          </a>
-          <a
-            href={RESUME_PDF}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--bg-border)] bg-[var(--bg-surface)] px-3.5 py-2 font-mono text-[var(--text-caption)] text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--accent)]"
-          >
-            open ↗
-          </a>
-          <CopyResumeLink url={shareUrl} />
-        </div>
-      </div>
-
-      {/* PDF viewer */}
-      <div className="mt-8 overflow-hidden rounded-2xl border border-[var(--bg-border)] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.15)] dark:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.5)]">
-        <iframe
-          title="Rubayet Hassan — Resume"
-          src={`${RESUME_PDF}#toolbar=0&view=FitH&zoom=90`}
-          className="h-[min(90vh,1100px)] w-full min-h-[600px] border-0"
+        <p>
+          This existing PDF may not include my current role.
+          <br />
+          <Link className="inline-link" href="/">
+            Visit the homepage for my current work.
+          </Link>
+        </p>
+      </header>
+      <div className="resume-actions">
+        <a href={pdf} download="Rubayet_Hassan_Resume.pdf" className="button">
+          Download PDF <Arrow />
+        </a>
+        <a
+          href={pdf}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="button button-secondary"
         >
-          <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
-            <p className="text-[var(--text-small)] text-[var(--text-secondary)]">
-              Your browser couldn&apos;t display the PDF inline.
-            </p>
-            <a
-              href={RESUME_PDF}
-              download
-              className="rounded-lg bg-violet-700 px-4 py-2 font-mono text-[var(--text-caption)] text-white"
-            >
-              download instead
-            </a>
-          </div>
-        </iframe>
+          Open PDF <Arrow diagonal />
+        </a>
+        <CopyResumeLink url={siteUrl + "/resume"} />
       </div>
-
+      <iframe
+        title="Rubayet Hassan — existing resume PDF"
+        src={pdf + "#toolbar=0&view=FitH"}
+        className="resume-viewer"
+      />
+      <p className="caption">
+        If the viewer is unavailable, use the Open PDF or Download PDF link
+        above.
+      </p>
     </div>
   );
 }

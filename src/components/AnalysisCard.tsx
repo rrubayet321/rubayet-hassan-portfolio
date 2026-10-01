@@ -1,36 +1,20 @@
 import Link from "next/link";
-import { TechTagList } from "@/components/TechTagList";
-
-export function AnalysisCard({
-  id,
-  title,
-  product,
-  date,
-  excerpt,
-  tags,
-}: {
-  id: string;
-  title: string;
-  product: string;
-  date: string;
-  excerpt: string;
-  tags: string[];
-}) {
+import { Arrow } from "@/components/Mark";
+import type { Analysis } from "@/lib/analysis";
+export function AnalysisCard({ item }: { item: Analysis }) {
   return (
-    <Link
-      href={`/analysis/${id}`}
-      className="block border-b border-[var(--bg-border)] py-6 transition-colors duration-150 hover:bg-[var(--bg-surface)]"
-    >
-      <h2 className="font-sans text-[0.95rem] font-medium text-[var(--text-primary)]">
-        {title}
-      </h2>
-      <p className="mt-2 font-mono text-[0.65rem] text-[var(--text-muted)]">
-        {product} · {date}
-      </p>
-      <p className="mt-3 line-clamp-2 font-sans text-[0.8rem] text-[var(--text-secondary)]">
-        {excerpt}
-      </p>
-      <TechTagList tags={tags} className="mt-4" />
-    </Link>
+    <article className="note-row">
+      <Link href={"/analysis/" + item.id} className="note-link">
+        <div>
+          <span className="eyebrow">{item.topic}</span>
+          <h3>{item.title}</h3>
+          <p>{item.excerpt}</p>
+        </div>
+        <div className="note-tail">
+          <time dateTime={item.dateTime}>{item.date}</time>
+          <Arrow diagonal />
+        </div>
+      </Link>
+    </article>
   );
 }

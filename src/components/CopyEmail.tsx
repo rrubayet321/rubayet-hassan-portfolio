@@ -1,76 +1,52 @@
 "use client";
-
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { IconCheck, IconCopy } from "@/components/icons";
+import { useEffect, useRef, useState } from "react";
 import { profile } from "@/lib/profile";
-
-const EMAIL = profile.email;
-
+import { IconCheck, IconCopy } from "@/components/icons";
 export function CopyEmail() {
-  const [copied, setCopied] = useState(false);
-
-  async function handleCopy() {
+  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
+  async function copy() {
     try {
-      await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
+      if (!navigator.clipboard?.writeText)
+        throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(profile.email);
+      setStatus("copied");
     } catch {
-      /* Clipboard blocked — graceful fallback: do nothing */
+      setStatus("failed");
     }
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setStatus("idle"), 3500);
   }
-
   return (
-    <div className="relative inline-flex items-center gap-3">
-      <span className="font-mono text-[var(--text-small)] text-[var(--text-secondary)]">
-        {EMAIL}
-      </span>
+    <div className="email-controls">
+      <a className="email-link" href={"mailto:" + profile.email}>
+        {profile.email}
+      </a>
       <button
         type="button"
-        onClick={handleCopy}
+        className="icon-button copy-button"
         aria-label="Copy email address"
-        title="Copy email"
-        className="flex h-8 w-8 items-center justify-center rounded border border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-[color,border-color] duration-150 hover:border-[var(--accent)] hover:text-[var(--accent)]"
+        onClick={copy}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {copied ? (
-            <motion.span
-              key="check"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.12 }}
-            >
-              <IconCheck className="text-[var(--mark-green-fg)]" />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="copy"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.12 }}
-            >
-              <IconCopy />
-            </motion.span>
-          )}
-        </AnimatePresence>
+        {status === "copied" ? <IconCheck /> : <IconCopy />}
       </button>
-
-      {/* Toast */}
-      <AnimatePresence>
-        {copied && (
-          <motion.span
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.15 }}
-            className="absolute left-0 top-[calc(100%+8px)] whitespace-nowrap font-mono text-[0.65rem] text-[var(--mark-green-fg)]"
-          >
-            copied to clipboard
-          </motion.span>
-        )}
-      </AnimatePresence>
+      <span
+        role="status"
+        aria-live="polite"
+        className={"copy-status " + (status === "failed" ? "copy-failed" : "")}
+      >
+        {status === "copied"
+          ? "Copied to clipboard"
+          : status === "failed"
+            ? "Couldn’t copy. Select the address, or open it to email me."
+            : ""}
+      </span>
     </div>
   );
 }

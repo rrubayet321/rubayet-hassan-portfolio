@@ -1,8 +1,7 @@
 "use client";
-
 import { useEffect } from "react";
-
-export default function Error({
+import Link from "next/link";
+export default function ErrorPage({
   error,
   reset,
 }: {
@@ -10,24 +9,23 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[app error]", error);
+    console.error("[portfolio]", error);
   }, [error]);
-
   return (
-    <div className="mx-auto flex min-h-[50vh] max-w-content flex-col items-center justify-center px-6 py-20 text-center">
-      <p className="font-medium text-[var(--text-primary)]">Something went wrong</p>
-      <p className="mt-2 max-w-md text-[var(--text-small)] text-[var(--text-muted)]">
-        {process.env.NODE_ENV === "development"
-          ? error.message
-          : "Please refresh the page or try again."}
-      </p>
-      <button
-        type="button"
-        onClick={reset}
-        className="mt-6 rounded-md border border-[var(--bg-border)] bg-[var(--bg-elevated)] px-4 py-2 text-[var(--text-small)] text-[var(--text-secondary)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
-      >
-        Try again
-      </button>
+    <div className="shell inner-page error-page">
+      <p className="eyebrow">Something went wrong</p>
+      <h1>
+        A small <span className="serif">interruption.</span>
+      </h1>
+      <p>Please try again. You can also return to the homepage.</p>
+      <div className="resume-actions">
+        <button type="button" className="button" onClick={reset}>
+          Try again
+        </button>
+        <Link href="/" className="button button-secondary">
+          Go home
+        </Link>
+      </div>
     </div>
   );
 }

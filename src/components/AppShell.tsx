@@ -1,25 +1,17 @@
-"use client";
-
-import { CommandPalette } from "@/components/CommandPalette";
-import { KeyboardHints } from "@/components/KeyboardHints";
-import { PageTransition } from "@/components/PageTransition";
-import { Sidebar } from "@/components/Sidebar";
+import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { SiteTopBar } from "@/components/SiteTopBar";
-
+import { PageTransition } from "@/components/PageTransition";
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Sidebar />
-      <SiteTopBar />
-      <CommandPalette />
-      <KeyboardHints />
-      <div className="flex min-h-screen flex-col pt-14 md:ml-[136px] md:pt-11">
-        <main className="flex flex-1 flex-col">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <SiteFooter />
-      </div>
-    </>
+    <div className="app-shell">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1}>
+        <PageTransition>{children}</PageTransition>
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

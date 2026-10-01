@@ -1,53 +1,83 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { TechTagList } from "@/components/TechTagList";
+import { Reveal } from "@/components/Reveal";
+import { Arrow } from "@/components/Mark";
 import { analyses } from "@/lib/analysis";
-
+import { projects } from "@/lib/projects";
 type Props = { params: Promise<{ id: string }> };
-
 export function generateStaticParams() {
-  return analyses.map((a) => ({ id: a.id }));
+  return analyses.map((item) => ({ id: item.id }));
 }
-
-export default async function AnalysisDetailPage({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const item = analyses.find((a) => a.id === id);
+  const item = analyses.find((note) => note.id === id);
+  return item
+    ? {
+        title: item.title,
+        description: item.excerpt,
+        alternates: { canonical: "/analysis/" + id },
+      }
+    : {};
+}
+export default async function NoteDetail({ params }: Props) {
+  const { id } = await params;
+  const item = analyses.find((note) => note.id === id);
   if (!item) notFound();
-
-  const paragraphs = item.body.split("\n\n");
-
+  const related = projects.find(
+    (project) => project.id === item.relatedProjectId,
+  );
   return (
-    <article className="mx-auto max-w-reading px-6 py-14 md:pl-8">
-      <Link
-        href="/analysis"
-        className="font-mono text-[0.68rem] text-[var(--text-muted)] transition-colors duration-150 hover:text-[var(--text-primary)]"
-      >
-        ← back
-      </Link>
-      <h1 className="mt-8 font-sans text-[1.5rem] font-medium text-[var(--text-primary)]">
-        {item.title}
-      </h1>
-      <p className="mt-4 font-mono text-[0.65rem] text-[var(--text-muted)]">
-        {item.product} · {item.date}
-      </p>
-      <TechTagList tags={item.tags} className="mt-6" />
-      <div className="my-10 border-t border-[var(--bg-border)]" />
-      <div className="space-y-6 font-sans text-[0.9rem] leading-[1.9] text-[var(--text-secondary)]">
-        {paragraphs.map((para, i) => (
-          <p key={i}>{para}</p>
-        ))}
+    <article className="shell inner-page note-detail">
+      <div className="reading">
+        <Reveal>
+          <Link href="/analysis" className="back-link">
+            ← All notes
+          </Link>
+          <header className="note-header">
+            <p className="eyebrow">
+              {item.topic} <span aria-hidden="true">/</span>{" "}
+              <time dateTime={item.dateTime}>{item.date}</time>
+            </p>
+            <h1>{item.title}</h1>
+            <p className="note-deck">{item.excerpt}</p>
+          </header>
+        </Reveal>
+        <div className="article-prose">
+          {item.body.map((paragraph, index) => (
+            <Reveal key={index}>
+              <p>{paragraph}</p>
+            </Reveal>
+          ))}
+        </div>
+        {related && (
+          <aside className="related-project">
+            <p className="eyebrow">Behind the note</p>
+            {related.github ? (
+              <a
+                href={related.github}
+                className="text-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {related.title} on GitHub <Arrow diagonal />
+              </a>
+            ) : (
+              <Link href={"/projects/" + related.id} className="text-link">
+                Explore {related.title} <Arrow />
+              </Link>
+            )}
+          </aside>
+        )}
+        <nav className="article-navigation" aria-label="Article navigation">
+          <Link href="/analysis" className="text-link">
+            ← All notes
+          </Link>
+          <Link href="/#contact" className="text-link">
+            Continue the conversation <Arrow diagonal />
+          </Link>
+        </nav>
       </div>
-      <footer className="mt-14 border-t border-[var(--bg-border)] pt-10 font-mono text-[0.72rem] text-[var(--text-muted)]">
-        this led to →{" "}
-        <a
-          href={item.relatedProject.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)] underline-offset-2 hover:underline"
-        >
-          {item.relatedProject.label}
-        </a>
-      </footer>
     </article>
   );
 }

@@ -1,37 +1,37 @@
 import Link from "next/link";
-
-const footerNav = [
-  { href: "/", label: "home" },
-  { href: "/projects", label: "projects" },
-  { href: "/about", label: "about" },
-  { href: "/contact", label: "contact" },
-] as const;
-
+import { Mark, Arrow } from "@/components/Mark";
+import { profile } from "@/lib/profile";
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-[var(--bg-border)] px-5 py-8 md:px-6 md:py-10 md:pl-8">
-      <div className="mx-auto max-w-content">
-        <div className="space-y-2.5">
-          <nav
-            className="font-sans [font-size:var(--text-small)] leading-normal text-[var(--text-secondary)]"
-            aria-label="Footer"
-          >
-            {footerNav.map(({ href, label }, i) => (
-              <span key={href}>
-                {i > 0 && <span className="text-[var(--text-muted)]/40"> · </span>}
-                <Link
-                  href={href}
-                  className="underline-offset-2 transition-colors duration-150 hover:text-[var(--text-primary)] hover:underline"
-                >
-                  {label}
-                </Link>
-              </span>
-            ))}
-          </nav>
-        </div>
-        <p className="mt-5 border-t border-[var(--bg-border)] pt-4 font-sans text-[0.65rem] leading-snug text-[var(--text-muted)]/80 sm:text-[0.6875rem]">
-          © {new Date().getFullYear()} Rubayet Hassan. All rights reserved.
-        </p>
+    <footer className="site-footer shell">
+      <div className="footer-top">
+        <Link
+          href="/"
+          className="footer-identity"
+          aria-label="Rubayet Hassan — home"
+        >
+          <Mark /> <span>Built with intention.</span>
+        </Link>
+        <nav aria-label="Footer navigation">
+          <Link href="/photos">
+            Photos <Arrow diagonal />
+          </Link>
+          <a href={profile.github} target="_blank" rel="noopener noreferrer">
+            GitHub <Arrow diagonal />
+          </a>
+          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn <Arrow diagonal />
+          </a>
+        </nav>
+      </div>
+      <div className="footer-bottom">
+        <span>© {new Date().getFullYear()} Rubayet Hassan</span>
+        <span>
+          Dhaka, Bangladesh{" "}
+          <span className="footer-coordinate" aria-hidden="true">
+            / 23° N, 90° E
+          </span>
+        </span>
       </div>
     </footer>
   );

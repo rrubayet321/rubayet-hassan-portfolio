@@ -1,292 +1,250 @@
-"use client";
-
-import { AnimatePresence, motion } from "framer-motion";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { Avatar } from "@/components/Avatar";
-import { BulletRow } from "@/components/BulletRow";
-import { Highlight } from "@/components/Highlight";
-import { SocialLinksRow } from "@/components/SocialLinksRow";
-import { now } from "@/lib/now";
-import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
-
-function SectionLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="group mt-2.5 inline-flex items-center gap-1.5 font-mono text-[var(--text-small)] text-[var(--accent)] transition-opacity duration-150 hover:opacity-70 md:mt-3"
-    >
-      <span>{children}</span>
-      <span className="inline-block transition-transform duration-150 group-hover:translate-x-1">
-        →
-      </span>
-    </Link>
-  );
-}
-
-function NameWithMeaning({ reduce, delay }: { reduce: boolean; delay: number }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
-
-  return (
-    <div ref={ref} className="relative w-fit">
-      <motion.h1
-        className="cursor-pointer text-[clamp(1.75rem,7vw+0.2rem,2.4rem)] font-medium tracking-[-0.03em] text-[var(--text-primary)] sm:text-[clamp(2.1rem,5vw,2.75rem)] md:text-[clamp(2.95rem,4.5vw+1rem,3.75rem)]"
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay }}
-        onClick={() => setOpen((v) => !v)}
-      >
-        Rubayet Hassan
-      </motion.h1>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            key="name-popup"
-            initial={{ opacity: 0, y: 6, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.97 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-0 top-[calc(100%+10px)] z-50 w-72 rounded-xl border border-[var(--bg-border)] bg-[var(--bg-surface)] px-5 py-4 shadow-xl"
-          >
-            <div className="flex flex-col gap-3">
-              <div>
-                <p className="font-mono text-[11px] uppercase tracking-widest text-[var(--text-muted)]">rubayet</p>
-                <p className="mt-0.5 font-mono text-xs text-[var(--text-muted)] opacity-60">روبایت</p>
-                <p className="mt-1 text-[var(--text-small)] text-[var(--text-primary)]">
-                  quatrains · four-line verses
-                </p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">
-                  as in Omar Khayyam&apos;s Rubaiyat. poetry in four lines.
-                </p>
-              </div>
-              <div className="border-t border-[var(--bg-border)]" />
-              <div>
-                <p className="font-mono text-[11px] uppercase tracking-widest text-[var(--text-muted)]">hassan</p>
-                <p className="mt-0.5 font-mono text-xs text-[var(--text-muted)] opacity-60">حسن</p>
-                <p className="mt-1 text-[var(--text-small)] text-[var(--text-primary)]">
-                  beautiful · good · handsome
-                </p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">
-                  arabic origin. my parents were optimistic.
-                </p>
-              </div>
-              <div className="border-t border-[var(--bg-border)]" />
-              <p className="text-[11px] italic text-[var(--text-muted)]">
-                together: &ldquo;beautiful poetry.&rdquo; make of that what you will.
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
+import { Arrow } from "@/components/Mark";
+import { SignatureArt } from "@/components/SignatureArt";
+import { Reveal } from "@/components/Reveal";
+import { ProjectCard } from "@/components/ProjectCard";
+import { AnalysisCard } from "@/components/AnalysisCard";
+import { CopyEmail } from "@/components/CopyEmail";
+import { BusinessFocus } from "@/components/BusinessFocus";
+import { featuredProjects } from "@/lib/projects";
+import { analyses } from "@/lib/analysis";
+import { profile } from "@/lib/profile";
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 export default function Home() {
-  const reduce = useReducedMotionSafe();
-  const s = reduce ? 0 : 0.06;
-
   return (
-    <div className="mx-auto flex max-w-content flex-col px-5 py-10 md:px-6 md:py-[60px]">
-      <motion.div
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 0 }}
-      >
-        <Avatar />
-      </motion.div>
+    <div className="shell home-page">
+      <section className="hero" aria-labelledby="intro-heading">
+        <div className="hero-copy">
+          <Reveal>
+            <p className="eyebrow hero-eyebrow">
+              <span className="status-dot" />
+              {profile.title}
+            </p>
+          </Reveal>
+          <Reveal delay={0.07}>
+            <h1 id="intro-heading">
+              Rubayet
+              <br />
+              Hassan<span className="copper">.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <p className="hero-description">
+              Less busywork.
+              <br />
+              <span className="serif">More business.</span>
+            </p>
+            <p className="hero-value">{profile.introduction}</p>
+          </Reveal>
+          <Reveal delay={0.21}>
+            <div className="hero-links">
+              <Link href="/projects" className="button">
+                Explore my work <Arrow />
+              </Link>
+              <a href="#contact" className="hero-contact">
+                Let’s talk <Arrow diagonal />
+              </a>
+            </div>
+            <p className="hero-location">
+              {profile.location} <span aria-hidden="true">↗</span>
+            </p>
+          </Reveal>
+        </div>
+        <Reveal className="hero-art" delay={0.14}>
+          <SignatureArt />
+        </Reveal>
+      </section>
 
-      <div className="mt-6 md:mt-8">
-        <NameWithMeaning reduce={reduce} delay={1 * s} />
-      </div>
-
-      <motion.p
-        className="mt-2.5 max-w-lg text-[var(--text-small)] leading-snug tracking-[0.02em] text-[var(--text-secondary)] md:mt-3 md:leading-relaxed"
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 2 * s }}
-      >
-        cs grad @ <Highlight variant="blue">brac</Highlight> · product engineer · AI dev · dhaka
-      </motion.p>
-
-      <motion.div
-        className="mt-5"
-        initial={reduce ? false : { opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 2.25 * s }}
-      >
-        <SocialLinksRow />
-      </motion.div>
-
-      <motion.p
-        className="mt-3 max-w-lg text-[var(--text-body)] leading-[1.55] text-[var(--text-secondary)] md:mt-4 md:leading-relaxed"
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 2.5 * s }}
-      >
-        <span className="text-[var(--text-muted)]">
-          shipped 5 products. zero were assigned. looking for a team that moves fast and regrets it productively.
-        </span>
-      </motion.p>
-
-      <div className="mt-8 flex flex-col gap-3.5 md:mt-10 md:gap-5">
-        <BulletRow delay={3 * s}>
-          <>
-            <strong className="text-[var(--text-primary)]">
-              Think in products, ship in code.
-            </strong>{" "}
-            Before code: user, metric, and{" "}
-            <em>&ldquo;does this need to exist?&rdquo;</em> — most engineers skip
-            that question.{" "}
-            <span className="text-[var(--text-muted)]">
-              I&apos;ve learned not to.
-            </span>
-          </>
-        </BulletRow>
-
-        <BulletRow delay={3.5 * s}>
-          <>
-            <strong className="text-[var(--text-primary)]">
-              I ship AI products end-to-end
-            </strong>
-            — from competitor analytics to a faith-first companion app to
-            terms you don&apos;t have to read. If it breaks in prod, I&apos;ve
-            already met it.
-          </>
-        </BulletRow>
-
-        <BulletRow delay={4 * s}>
-          <>
-            <strong className="text-[var(--text-primary)]">
-              Research detour:
-            </strong>{" "}
-            Long waits for the right label. Spent{" "}
-            <strong className="text-[var(--text-primary)]">9 months</strong> on{" "}
-            <Highlight variant="blue">C‑MAT</Highlight> — pics + squiggles to one
-            readout; <strong className="text-[var(--text-primary)]">~$6</strong> to
-            train, works when data is messy,{" "}
-            <strong className="text-[var(--text-primary)]">1,100+</strong> people
-            across <strong className="text-[var(--text-primary)]">7 countries</strong>
-            .
-            <span className="text-[var(--text-muted)]">
-              {" "}
-              Second opinion for doctors — still lab, not sci-fi.
-            </span>
-          </>
-        </BulletRow>
-
-        <BulletRow delay={5 * s}>
-          <>
-            Off keyboard:{" "}
-            <Highlight variant="green">strong coffee</Highlight>, training that
-            hurts on purpose, and a loose goal of{" "}
-            <Highlight variant="maroon">10k steps</Highlight> so my brain remembers I
-            have legs. Founder mode is just endurance with better tooling.
-          </>
-        </BulletRow>
-
-        <BulletRow delay={6 * s}>
-          <>
-            <strong className="text-[var(--text-primary)]">
-              Credibility that stuck:
-            </strong>{" "}
-            TA&apos;d Python and biology at{" "}
-            <Highlight variant="orange">Vertical Horizon</Highlight>; built{" "}
-            <Link
-              href="https://bracu-network.vercel.app/"
-              target="_blank"
-              rel="noreferrer"
-              className="transition-opacity hover:opacity-80"
-            >
-              <Highlight variant="blue">bracu.network</Highlight>
-            </Link>{" "}
-            so BRACU people can network without making LinkedIn their whole
-            personality.
-          </>
-        </BulletRow>
-
-        <BulletRow delay={7 * s}>
-          <Link
-            href="/projects"
-            className="group inline-flex items-center gap-1 text-[var(--text-small)] text-[var(--accent)] underline underline-offset-2"
-          >
-            thesis &amp; shipped work
-            <span className="inline-block transition-transform duration-150 group-hover:translate-x-1">→</span>
-          </Link>
-        </BulletRow>
-      </div>
-
-      {/* Now strip */}
-      <motion.div
-        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-10"
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 8 * s }}
-      >
-        <p
-          className="font-medium text-[var(--text-secondary)]"
-          style={{ fontSize: "var(--text-small)" }}
-        >
-          now{" "}
-          <span className="font-mono text-[var(--text-caption)] text-[var(--text-muted)]">
-            · {now.date}
+      <Reveal>
+        <section className="current-work" aria-labelledby="current-heading">
+          <div className="current-label">
+            <span className="eyebrow">Currently</span>
+            <h2 id="current-heading">
+              <a
+                href={profile.employerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="current-building">Building</span>{" "}
+                {profile.employer}
+                <Arrow diagonal />
+              </a>
+            </h2>
+          </div>
+          <p>{profile.currentWork}</p>
+          <span className="current-stamp" aria-hidden="true">
+            PLAN
+            <br />
+            BUILD
+            <br />
+            REFINE
           </span>
-        </p>
-        <ul className="mt-3 flex flex-col gap-0.5 md:mt-4 md:gap-1">
-          {now.items.map((item, i) => (
-            <li
-              key={i}
-              className="group flex gap-2 rounded-md px-2 py-1 -mx-2 text-[var(--text-small)] leading-snug text-[var(--text-muted)] transition-colors duration-150 hover:bg-[var(--bg-surface)] hover:text-[var(--text-secondary)] md:py-1.5 md:leading-relaxed"
-            >
-              <span className="shrink-0 font-mono text-[var(--accent)] transition-transform duration-150 group-hover:translate-x-0.5">↳</span>
-              <span>{item}</span>
-            </li>
+        </section>
+      </Reveal>
+      <BusinessFocus />
+
+      <section className="section selected-work" aria-labelledby="work-heading">
+        <Reveal>
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow section-index">01 / Selected work</p>
+              <h2 id="work-heading">
+                Small ideas. <span className="serif">Real utility.</span>
+              </h2>
+            </div>
+            <Link href="/projects" className="text-link section-action">
+              All work <Arrow />
+            </Link>
+          </div>
+        </Reveal>
+        <div className="project-grid">
+          {featuredProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
-        </ul>
-      </motion.div>
+        </div>
+        <Reveal>
+          <a
+            href="https://github.com/rrubayet321/ummahspeaks"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="compact-project"
+            aria-label="Ummah Speaks on GitHub"
+          >
+            <span className="compact-plus" aria-hidden="true">
+              +
+            </span>
+            <div>
+              <h3>Also built: Ummah Speaks</h3>
+              <p>A little clarity. A moment to reflect.</p>
+            </div>
+            <Arrow diagonal />
+          </a>
+        </Reveal>
+      </section>
 
-      <motion.div
-        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-10"
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 9 * s }}
-      >
-        <p
-          className="font-medium text-[var(--text-secondary)]"
-          style={{ fontSize: "var(--text-small)" }}
-        >
-          product thinking
-        </p>
-        <SectionLink href="/analysis">notes &amp; teardowns</SectionLink>
-      </motion.div>
+      <section className="research-strip" aria-labelledby="research-heading">
+        <Reveal>
+          <div className="research-inner">
+            <div className="research-symbol" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="research-copy">
+              <p className="eyebrow">02 / A research detour</p>
+              <h2 id="research-heading">
+                Different signals.
+                <br />
+                <span className="serif">A shared understanding.</span>
+              </h2>
+              <p>
+                C-MAT explores the connection between brain imaging and EEG
+                through multimodal machine learning. A lesson in asking better
+                questions of imperfect data.
+              </p>
+              <Link href="/projects/cmat" className="text-link">
+                Explore the research <Arrow />
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+      </section>
 
-      <motion.div
-        className="mt-10 border-t border-[var(--bg-border)] pt-8 md:mt-14 md:pt-10"
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduce ? 0 : 0.28, ease: "easeOut", delay: 10 * s }}
+      <section
+        id="about"
+        className="section about-section"
+        aria-labelledby="about-heading"
       >
-        <p
-          className="font-medium text-[var(--text-secondary)]"
-          style={{ fontSize: "var(--text-small)" }}
-        >
-          moments worth keeping
-        </p>
-        <SectionLink href="/photos">life between the commits</SectionLink>
-      </motion.div>
+        <Reveal>
+          <div className="about-layout">
+            <div>
+              <p className="eyebrow">03 / A little background</p>
+              <h2 id="about-heading">
+                Curious by nature.
+                <br />
+                <span className="serif">Engineer by practice.</span>
+              </h2>
+            </div>
+            <div className="about-copy">
+              <p>
+                I’m a computer science graduate from BRAC University, based in
+                Dhaka. I work across AI products, full-stack software, and the
+                practical details that keep a system running.
+              </p>
+              <p>
+                Outside the work, there’s usually a strong coffee, an early
+                morning, or a little time away from the keyboard.
+              </p>
+              <Link href="/photos" className="text-link">
+                A few moments outside work <Arrow diagonal />
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      <section
+        className="section notes-section"
+        aria-labelledby="notes-heading"
+      >
+        <Reveal>
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">04 / Field notes</p>
+              <h2 id="notes-heading">
+                Behind the <span className="serif">build.</span>
+              </h2>
+            </div>
+            <Link href="/analysis" className="text-link section-action">
+              All notes <Arrow />
+            </Link>
+          </div>
+        </Reveal>
+        <Reveal>
+          <div className="notes-list">
+            {analyses.slice(0, 2).map((item) => (
+              <AnalysisCard key={item.id} item={item} />
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      <section
+        id="contact"
+        className="contact-section"
+        aria-labelledby="contact-heading"
+      >
+        <Reveal>
+          <p className="eyebrow">05 / Start a conversation</p>
+          <h2 id="contact-heading">
+            Have a problem
+            <br />
+            worth <span className="serif">solving?</span>
+          </h2>
+          <p className="contact-description">
+            Let’s turn it into software that moves your business forward.
+            <br className="desktop-break" /> A useful AI product starts with a
+            real need.
+          </p>
+          <CopyEmail />
+          <div className="contact-socials">
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">
+              GitHub <Arrow diagonal />
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn <Arrow diagonal />
+            </a>
+          </div>
+        </Reveal>
+        <span className="contact-asterisk" aria-hidden="true">
+          ✳
+        </span>
+      </section>
     </div>
   );
 }

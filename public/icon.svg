@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" fill="#111111" />
-  <text
-    x="256"
-    y="256"
-    text-anchor="middle"
-    dominant-baseline="central"
-    fill="#ffffff"
-    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif"
-    font-size="220"
-    font-weight="700"
-    letter-spacing="-0.04em"
-  >
-    RH
-  </text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0D0F10"/><g fill="none" stroke="#F2EEE7" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"><path d="M14 46V18H25C38 18 38 34 25 34H14M26 34L36 46M39 18V46M51 18V46M39 32H51"/></g><circle cx="54" cy="50" r="2" fill="#DCA77C"/></svg>

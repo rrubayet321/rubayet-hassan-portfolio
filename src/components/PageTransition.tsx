@@ -1,26 +1,26 @@
 "use client";
-
-import { AnimatePresence, motion } from "framer-motion";
+import { m, useAnimationControls } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
-
+import { useEffect } from "react";
+import { motionTiming } from "@/lib/motion";
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const reduce = useReducedMotionSafe();
-
+  const controls = useAnimationControls();
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      controls.set({ opacity: 1 });
+      return;
+    }
+    controls.set({ opacity: 0.75 });
+    void controls.start({
+      opacity: 1,
+      transition: { duration: motionTiming.page },
+    });
+    return () => controls.stop();
+  }, [pathname, controls]);
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial={reduce ? false : { opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={
-          reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }
-        }
-        transition={{ duration: reduce ? 0 : 0.22, ease: "easeOut" }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <m.div initial={false} animate={controls}>
+      {children}
+    </m.div>
   );
 }

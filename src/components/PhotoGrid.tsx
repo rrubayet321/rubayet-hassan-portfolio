@@ -1,171 +1,205 @@
 "use client";
-
-import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
-type Photo = { src: string; caption: string };
-
-function PhotoCard({
-  photo,
-  index,
-  onOpen,
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Reveal } from "@/components/Reveal";
+import type { Photo } from "@/lib/photos";
+function PhotoImage({
+  src,
+  alt,
+  sizes,
+  priority = false,
 }: {
-  photo: Photo;
-  index: number;
-  onOpen: () => void;
+  src: string;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
 }) {
-  return (
-    <motion.button
-      type="button"
-      className="group relative block w-full overflow-hidden rounded-lg bg-[var(--bg-elevated)] text-left"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut", delay: index * 0.06 }}
-      onClick={onOpen}
-      aria-label={photo.caption}
+  const [failedSource, setFailedSource] = useState<string | null>(null);
+  return failedSource === src ? (
+    <div
+      className="photo-fallback"
+      role="img"
+      aria-label={alt + ". Photo unavailable."}
     >
-      <Image
-        src={photo.src}
-        alt={photo.caption}
-        width={900}
-        height={1200}
-        className="h-auto w-full object-cover object-center transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.04] max-md:max-h-[13rem] max-md:min-h-0 md:max-h-none"
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      />
-      {/* Caption overlay — slides up on hover */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 pb-4 pt-12 transition-transform duration-300 ease-out group-hover:translate-y-0">
-        <p className="font-mono text-[0.7rem] leading-snug text-white/90">
-          {photo.caption}
-        </p>
-      </div>
-      {/* Subtle border on hover */}
-      <div className="pointer-events-none absolute inset-0 rounded-lg opacity-0 ring-1 ring-white/20 transition-opacity duration-300 group-hover:opacity-100" />
-    </motion.button>
+      <span>Photo unavailable</span>
+      <small>{alt}</small>
+    </div>
+  ) : (
+    <Image
+      key={src}
+      src={src}
+      alt={alt}
+      fill
+      sizes={sizes}
+      priority={priority}
+      onError={() => setFailedSource(src)}
+    />
   );
 }
-
-function Lightbox({
-  photos,
-  index,
-  onClose,
-}: {
-  photos: Photo[];
-  index: number;
-  onClose: () => void;
-}) {
-  const [current, setCurrent] = useState(index);
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") setCurrent((v) => Math.min(v + 1, photos.length - 1));
-      if (e.key === "ArrowLeft") setCurrent((v) => Math.max(v - 1, 0));
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, photos.length]);
-
-  const photo = photos[current];
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-[300] flex flex-col items-center justify-center bg-black/90 p-4 backdrop-blur-md"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={onClose}
-    >
-      {/* Image */}
-      <motion.div
-        key={current}
-        className="relative max-h-[80vh] max-w-[90vw]"
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.22 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Image
-          src={photo.src}
-          alt={photo.caption}
-          width={1200}
-          height={1600}
-          className="max-h-[78vh] w-auto rounded-lg object-contain shadow-2xl"
-          sizes="90vw"
-          priority
-        />
-      </motion.div>
-
-      {/* Caption + counter */}
-      <div className="mt-4 flex w-full max-w-[600px] items-center justify-between gap-4 px-2" onClick={(e) => e.stopPropagation()}>
-        <p className="font-mono text-[0.72rem] text-white/60">{photo.caption}</p>
-        <span className="shrink-0 font-mono text-[0.65rem] text-white/30">
-          {current + 1} / {photos.length}
-        </span>
-      </div>
-
-      {/* Prev / next */}
-      {current > 0 && (
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); setCurrent((v) => v - 1); }}
-          className="fixed left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 font-mono text-white/70 backdrop-blur-sm transition-colors hover:bg-white/20"
-          aria-label="Previous photo"
-        >
-          ←
-        </button>
-      )}
-      {current < photos.length - 1 && (
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); setCurrent((v) => v + 1); }}
-          className="fixed right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 font-mono text-white/70 backdrop-blur-sm transition-colors hover:bg-white/20"
-          aria-label="Next photo"
-        >
-          →
-        </button>
-      )}
-
-      {/* Close */}
-      <button
-        type="button"
-        onClick={onClose}
-        className="fixed right-4 top-4 rounded-full bg-white/10 px-3 py-1 font-mono text-[0.7rem] text-white/60 backdrop-blur-sm transition-colors hover:bg-white/20"
-        aria-label="Close"
-      >
-        esc
-      </button>
-    </motion.div>
-  );
-}
-
 export function PhotoGrid({ photos }: { photos: Photo[] }) {
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const openerRef = useRef<HTMLAnchorElement | null>(null);
+  const previousOverflow = useRef<string | null>(null);
+  const [current, setCurrent] = useState(0);
+  const [open, setOpen] = useState(false);
+  const unlockScroll = useCallback(() => {
+    if (previousOverflow.current !== null) {
+      document.body.style.overflow = previousOverflow.current;
+      previousOverflow.current = null;
+    }
+  }, []);
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+    const dialog = dialogRef.current;
+    previousOverflow.current = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (!dialog.open) dialog.showModal();
+    return unlockScroll;
+  }, [open, unlockScroll]);
+  if (!photos.length) return <p className="muted">More moments to come.</p>;
+  const photo = photos[current];
+  function close() {
+    dialogRef.current?.close();
+  }
   return (
     <>
-      <div className="columns-1 gap-2 sm:columns-2 sm:gap-3 lg:columns-3">
-        {photos.map((p, i) => (
-          <div key={p.src} className="mb-2 break-inside-avoid sm:mb-3">
-            <PhotoCard
-              photo={p}
-              index={i}
-              onOpen={() => setLightboxIndex(i)}
-            />
-          </div>
+      <div className="photo-grid">
+        {photos.map((item, index) => (
+          <Reveal key={item.src} delay={(index % 3) * 0.07}>
+            <figure className="photo-card">
+              <a
+                href={item.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={"Enlarge photo: " + item.caption}
+                onClick={(event) => {
+                  if (
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey ||
+                    event.button !== 0
+                  )
+                    return;
+                  // The underlying image link is also a working no-JavaScript fallback.
+                  if (!dialogRef.current?.showModal) return;
+                  event.preventDefault();
+                  openerRef.current = event.currentTarget;
+                  setCurrent(index);
+                  setOpen(true);
+                }}
+              >
+                <div className="photo-thumb">
+                  <PhotoImage
+                    src={item.src}
+                    alt={item.caption}
+                    sizes="(max-width: 479px) calc(100vw - 40px), (max-width: 767px) calc((100vw - 58px) / 2), (max-width: 1023px) calc((100vw - 88px) / 2), 331px"
+                    priority={index === 0}
+                  />
+                </div>
+              </a>
+              <figcaption>
+                <span className="photo-index" aria-hidden="true">
+                  0{index + 1}
+                </span>
+                {item.caption}
+              </figcaption>
+            </figure>
+          </Reveal>
         ))}
       </div>
-
-      <AnimatePresence>
-        {lightboxIndex !== null && (
-          <Lightbox
-            photos={photos}
-            index={lightboxIndex}
-            onClose={() => setLightboxIndex(null)}
-          />
-        )}
-      </AnimatePresence>
+      <dialog
+        ref={dialogRef}
+        className="photo-dialog"
+        aria-labelledby="photo-viewer-title"
+        onClose={() => {
+          unlockScroll();
+          setOpen(false);
+          openerRef.current?.focus({ preventScroll: true });
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) close();
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Tab") {
+            const controls = Array.from(
+              event.currentTarget.querySelectorAll<HTMLElement>(
+                'button:not([disabled]), a[href], [tabindex="0"]',
+              ),
+            );
+            event.preventDefault();
+            const index = controls.indexOf(
+              document.activeElement as HTMLElement,
+            );
+            const nextIndex =
+              index < 0
+                ? event.shiftKey
+                  ? controls.length - 1
+                  : 0
+                : (index + (event.shiftKey ? -1 : 1) + controls.length) %
+                  controls.length;
+            controls[nextIndex]?.focus();
+          }
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            setCurrent((value) => Math.min(value + 1, photos.length - 1));
+          }
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            setCurrent((value) => Math.max(value - 1, 0));
+          }
+        }}
+      >
+        <div className="photo-viewer">
+          <div className="viewer-toolbar">
+            <h2 id="photo-viewer-title" className="eyebrow">
+              A few moments
+            </h2>
+            <button
+              type="button"
+              className="icon-button"
+              onClick={close}
+              aria-label="Close photo"
+              autoFocus
+            >
+              ✕
+            </button>
+          </div>
+          <div className="viewer-image">
+            <PhotoImage
+              src={photo.src}
+              alt={photo.caption}
+              sizes="(max-width: 768px) 90vw, 800px"
+            />
+          </div>
+          <div className="viewer-bottom">
+            <p aria-live="polite">{photo.caption}</p>
+            <div className="viewer-navigation">
+              <button
+                type="button"
+                className="icon-button"
+                disabled={current === 0}
+                onClick={() => setCurrent((value) => value - 1)}
+                aria-label="Previous photo"
+              >
+                ←
+              </button>
+              <span className="caption" aria-live="polite">
+                {current + 1} / {photos.length}
+              </span>
+              <button
+                type="button"
+                className="icon-button"
+                disabled={current === photos.length - 1}
+                onClick={() => setCurrent((value) => value + 1)}
+                aria-label="Next photo"
+              >
+                →
+              </button>
+            </div>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 }

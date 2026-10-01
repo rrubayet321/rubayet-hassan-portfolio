@@ -1,166 +1,154 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { RichInline } from "@/components/RichInline";
-import { TechTagList } from "@/components/TechTagList";
+import { Arrow } from "@/components/Mark";
+import { Reveal } from "@/components/Reveal";
 import { projects } from "@/lib/projects";
-
 type Props = { params: Promise<{ id: string }> };
-
 export function generateStaticParams() {
-  return projects
-    .filter((p) => p.caseStudy)
-    .map((p) => ({ id: p.id }));
+  return projects.map((project) => ({ id: project.id }));
 }
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const project = projects.find((p) => p.id === id);
+  const project = projects.find((item) => item.id === id);
   if (!project) return {};
   return {
-    title: `${project.title} — Case Study · Rubayet Hassan`,
-    description: project.subtitle,
+    title: project.title,
+    description: project.summary,
+    alternates: { canonical: "/projects/" + id },
   };
 }
-
-export default async function ProjectCaseStudyPage({ params }: Props) {
+export default async function ProjectDetail({ params }: Props) {
   const { id } = await params;
-  const project = projects.find((p) => p.id === id);
-
-  if (!project || !project.caseStudy) notFound();
-
-  const cs = project.caseStudy;
-
+  const project = projects.find((item) => item.id === id);
+  if (!project) notFound();
+  const index = projects.findIndex((item) => item.id === id);
+  const next = projects[(index + 1) % projects.length];
   return (
-    <article className="mx-auto max-w-reading px-6 py-14 md:pl-8">
-      <Link
-        href="/projects"
-        className="font-mono text-[0.68rem] text-[var(--text-muted)] transition-colors duration-150 hover:text-[var(--text-primary)]"
-      >
-        ← projects
-      </Link>
-
-      {/* Header */}
-      <h1 className="mt-8 font-sans text-[1.5rem] font-medium text-[var(--text-primary)]">
-        {project.title}
-      </h1>
-      <p className="mt-2 text-[var(--text-small)] text-[var(--text-secondary)]">
-        <RichInline text={project.subtitle} />
-      </p>
-      <TechTagList tags={project.tags} className="mt-4" />
-
-      {/* Links */}
-      <div className="mt-4 flex flex-wrap gap-6 font-mono text-[var(--text-small)]">
-        {project.github && (
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--text-secondary)] underline underline-offset-2 transition-colors hover:text-[var(--text-primary)]"
-          >
-            GitHub
-          </a>
-        )}
-        {project.live && (
-          <a
-            href={project.live}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--text-secondary)] underline underline-offset-2 transition-colors hover:text-[var(--text-primary)]"
-          >
-            Live demo
-          </a>
-        )}
-      </div>
-
-      <div className="my-10 border-t border-[var(--bg-border)]" />
-
-      {/* Case study body */}
-      <div className="space-y-12 font-sans text-[0.9rem] leading-[1.9] text-[var(--text-secondary)]">
-
-        <section>
-          <h2 className="mb-4 font-medium text-[var(--text-primary)] [font-size:var(--text-small)]">
-            the problem
-          </h2>
-          <p>
-            <RichInline text={cs.problem} />
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-4 font-medium text-[var(--text-primary)] [font-size:var(--text-small)]">
-            the approach
-          </h2>
-          <p>
-            <RichInline text={cs.approach} />
-          </p>
-        </section>
-
-        {cs.decisions.length > 0 && (
-          <section>
-            <h2 className="mb-6 font-medium text-[var(--text-primary)] [font-size:var(--text-small)]">
-              key decisions
-            </h2>
-            <div className="flex flex-col gap-6">
-              {cs.decisions.map((d) => (
-                <div key={d.title}>
-                  <p className="font-medium text-[var(--text-primary)]">
-                    ↳ {d.title}
-                  </p>
-                  <p className="mt-1.5 text-[var(--text-muted)]">
-                    <RichInline text={d.body} />
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {cs.metrics.length > 0 && (
-          <section>
-            <h2 className="mb-6 font-medium text-[var(--text-primary)] [font-size:var(--text-small)]">
-              by the numbers
-            </h2>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {cs.metrics.map((m) => (
-                <div
-                  key={m.label}
-                  className="rounded-md border border-[var(--bg-border)] bg-[var(--bg-elevated)] px-4 py-4"
-                >
-                  <p className="font-mono text-[var(--text-caption)] text-[var(--text-muted)]">
-                    <RichInline text={m.label} />
-                  </p>
-                  <p className="mt-1 font-sans font-medium text-[var(--accent)] [font-size:var(--text-small)]">
-                    <RichInline text={m.value} />
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        <section>
-          <h2 className="mb-4 font-medium text-[var(--text-primary)] [font-size:var(--text-small)]">
-            what i actually learned
-          </h2>
-          <p>
-            <RichInline text={cs.learnings} />
-          </p>
-        </section>
-      </div>
-
-      {/* Stat line */}
-      <p className="mt-10 font-mono text-[var(--text-small)] text-[var(--accent)]">
-        <RichInline text={project.stat} />
-      </p>
-
-      <div className="mt-10 border-t border-[var(--bg-border)] pt-8">
-        <Link
-          href="/projects"
-          className="font-mono text-[0.72rem] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-        >
-          ← back to all projects
+    <article className="shell inner-page case-page">
+      <Reveal>
+        <Link href="/projects" className="back-link">
+          ← All work
         </Link>
+        <header className="case-header">
+          <p className="eyebrow">
+            {project.type === "research" ? "Research" : "Independent project"} /{" "}
+            {project.category}
+          </p>
+          <h1>
+            {project.title}
+            <span className="copper">.</span>
+          </h1>
+          <p className="case-tagline serif">{project.headline}</p>
+          <p className="case-intro">{project.summary}</p>
+          <ul className="tech-list">
+            {project.tags.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+          {(project.live || project.github) && (
+            <div className="case-actions">
+              {project.live && (
+                <a
+                  className="button button-secondary"
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open project <Arrow diagonal />
+                </a>
+              )}
+              {project.github && (
+                <a
+                  className="button"
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Source on GitHub <Arrow diagonal />
+                </a>
+              )}
+            </div>
+          )}
+        </header>
+      </Reveal>
+      <div className="reading case-body">
+        <Reveal>
+          <section className="article-section">
+            <p className="eyebrow">01 / The starting point</p>
+            <h2>The problem</h2>
+            <p>{project.caseStudy.problem}</p>
+          </section>
+        </Reveal>
+        <Reveal>
+          <section className="article-section">
+            <p className="eyebrow">02 / From idea to implementation</p>
+            <h2>What I built</h2>
+            <p>{project.caseStudy.contribution}</p>
+          </section>
+        </Reveal>
+        <Reveal>
+          <section className="article-section">
+            <p className="eyebrow">03 / The choices behind it</p>
+            <h2>Engineering decisions</h2>
+            <div className="decisions">
+              {project.caseStudy.decisions.map((decision, decisionIndex) => (
+                <section key={decision.title} className="decision">
+                  <span className="decision-index" aria-hidden="true">
+                    0{decisionIndex + 1}
+                  </span>
+                  <div>
+                    <h3>{decision.title}</h3>
+                    <p>{decision.body}</p>
+                  </div>
+                </section>
+              ))}
+            </div>
+          </section>
+        </Reveal>
+        {project.figure && (
+          <Reveal>
+            <figure className="research-figure">
+              <Image
+                src={project.figure.src}
+                alt={project.figure.alt}
+                width={1024}
+                height={682}
+                sizes="(max-width: 768px) calc(100vw - 40px), 680px"
+              />
+              <figcaption className="caption">
+                {project.figure.caption}
+              </figcaption>
+            </figure>
+          </Reveal>
+        )}
+        <Reveal>
+          <section className="article-section learning-section">
+            <p className="eyebrow">04 / Looking back</p>
+            <h2>What stayed with me</h2>
+            <p>{project.caseStudy.learnings}</p>
+          </section>
+        </Reveal>
+        <nav className="article-navigation" aria-label="Project navigation">
+          <Link href="/projects" className="text-link">
+            ← All work
+          </Link>
+          {next.github ? (
+            <a
+              href={next.github}
+              className="text-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Next: {next.title} <Arrow diagonal />
+            </a>
+          ) : (
+            <Link href={"/projects/" + next.id} className="text-link">
+              Next: {next.title} <Arrow />
+            </Link>
+          )}
+        </nav>
       </div>
     </article>
   );

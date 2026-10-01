@@ -1,91 +1,63 @@
 export type Analysis = {
   id: string;
   title: string;
-  product: string;
   date: string;
-  tags: string[];
+  dateTime: string;
+  topic: string;
   excerpt: string;
-  body: string;
-  relatedProject: { label: string; href: string };
+  body: string[];
+  relatedProjectId: string;
 };
-
 export const analyses: Analysis[] = [
   {
     id: "youtube-analytics-gap",
-    title: "Why YouTube has no native competitor analytics",
-    product: "YouTube Studio",
+    title: "The useful space between analytics and context",
     date: "April 2026",
-    tags: ["product gap", "deliberate design", "why i built channelspy"],
+    dateTime: "2026-04",
+    topic: "Product thinking",
     excerpt:
-      "YouTube Studio shows your own metrics in excruciating, beautiful detail. It tells you absolutely nothing about anyone else's. That's not an oversight — it's a deliberate strategic moat. Here's what that gap looks like from the outside.",
-    body: `YouTube Studio is genuinely well-designed for what it does. The dashboards are clean. The audience retention graph might be the most actionable analytics view I've seen outside paid enterprise tools. It is, by most measures, good software.
-
-But there's one enormous blind spot built into it by design: you cannot see anyone else's numbers. Not a competitor's view count trend. Not their upload cadence. Not even a rough ballpark of what a sponsored post in your niche is worth.
-
-This is not a technical limitation. YouTube has all of this data. The decision is strategic.
-
-Surfacing competitor metrics would push creators into a pure imitation loop — copy whatever's working, chase whoever's winning, race to someone else's ceiling. YouTube would rather you focused inward. The algorithm rewards genuine quality over engineered virality, and surfacing rival stats would undermine that nudge. Better content beats copied content. YouTube's growth depends on that being true.
-
-The side effect is a genuine market gap. Agencies running brand deals, independent creators pricing their sponsorships, and marketers benchmarking a niche have no native tool. They're screenshotting Social Blade and building spreadsheets.
-
-That's exactly why ChannelSpy exists. Not to spy — great name though — but to give context. Knowing that channels in your niche average 40K views per video changes how you set goals, pitch clients, and decide what's worth building.
-
-The lesson that stuck: the most interesting products don't live where the obvious problems are. They live in the gaps left by someone else's deliberate strategic choice.`,
-    relatedProject: {
-      label: "ChannelSpy",
-      href: "https://channelspy.vercel.app",
-    },
+      "What building ChannelSpy taught me about turning public data into a useful point of comparison.",
+    body: [
+      "Your own numbers answer one set of questions. Knowing how other public channels perform answers another: what is typical in a niche, how consistent are uploads, and how much does an unusual spike change the picture?",
+      "Building ChannelSpy started with that need for context. Public channel data is available, but gathering it and turning it into a comparison takes work. A dashboard can make that process easier if it chooses the right comparisons.",
+      "The important decision was to look at typical performance. A mean can be heavily influenced by one unusually popular upload. Median-based scoring and outlier detection offer a different view: what the channel tends to do, rather than what happened on its best day.",
+      "I cannot speak for why a platform includes or omits a feature. My takeaway is narrower: there can be useful products in the work people do between existing tools. Finding that work starts with watching how someone tries to answer a question.",
+      "The interface is only part of the solution. A clear benchmark, an honest explanation of what it measures, and an export someone can use elsewhere are what make the report useful.",
+    ],
+    relatedProjectId: "channelspy",
   },
   {
     id: "llm-chrome-extension-ux",
-    title: "The UX problem with AI browser extensions",
-    product: "Chrome Extension ecosystem",
+    title: "Latency is part of the interface",
     date: "March 2026",
-    tags: ["UX", "latency is design", "why i built skiptheterms"],
+    dateTime: "2026-03",
+    topic: "Interaction design",
     excerpt:
-      "Most AI Chrome extensions make you open a panel, paste text, click a button, wait, read the result, close the panel, and return to the page. That's five steps. For a problem that should take one. Building SkipTheTerms taught me what zero-friction actually means.",
-    body: `The dominant UX pattern for AI browser extensions goes like this: notice the problem → click extension icon → panel opens → paste or select text → click summarise → wait → read result → close panel → return to page → realise you lost context.
-
-That's eight steps. For a tool that exists to save you time.
-
-The core insight behind SkipTheTerms was simple: the trigger — landing on a Terms of Service page — is completely predictable. The URL contains /terms, /privacy, /legal. The page title says it. The extension doesn't need to wait for the user to initiate anything. It can detect the context automatically, pre-trigger the summarisation in the background, and surface the result with a single badge. No panel. No copy-paste. No mental context switch.
-
-This collapsed the interaction: arrive at terms page → see badge → click once → read summary.
-
-The backend had to match this UX promise. If the summary takes 8 seconds, the friction isn't gone — it's just relocated. Supabase caching on document hash was the fix. Cache hits return in 50ms. Fast enough to feel instant. Not fast. Instant. There's a difference, and users can feel it.
-
-The thing I most underestimated: backend latency isn't just an engineering metric. It is a UX decision. Every second a user waits is a second they're thinking about the wait, not the result.
-
-Zero-friction doesn't mean fewer features. It means removing the distance between the problem and the answer.`,
-    relatedProject: {
-      label: "SkipTheTerms",
-      href: "https://github.com/rrubayet321/skiptheterms",
-    },
+      "An AI feature should fit the moment it is needed. Preparing an answer can matter more than adding another button.",
+    body: [
+      "An extension can solve a useful problem and still interrupt the person using it. Open a panel, select text, trigger a request, wait, and return to the page: each step asks for attention.",
+      "With SkipTheTerms, the page itself provides a clue about what someone needs. A terms or privacy page can be recognized from its context. That makes it possible to prepare a summary in the background instead of waiting for a manual request.",
+      "This changes the interaction, but it also changes the engineering requirements. Background work needs limits, clear failure states, and a sensible rule for when to run. A fast interface should not imply that every request succeeded.",
+      "Caching unchanged documents helps the backend support the same idea. Reusing an available summary removes unnecessary generation work. The useful question is not only how fast the model responds; it is how long someone waits before the result becomes useful.",
+      "My lesson was to design the trigger and the waiting state together. A model call is part of a longer interaction, and the experience depends on the whole sequence.",
+    ],
+    relatedProjectId: "skiptheterms",
   },
   {
     id: "llm-cost-reality",
-    title: "You're probably spending 10× more on LLM calls than you need to",
-    product: "LLM API economics",
+    title: "Before choosing a faster model, check the cache",
     date: "February 2026",
-    tags: ["cost optimisation", "caching", "what nobody tells you"],
+    dateTime: "2026-02",
+    topic: "AI engineering",
     excerpt:
-      "Everyone argues about which LLM to use. Nobody talks about how to stop calling it 40 times for the same document. Here's what building SkipTheTerms taught me about the most underrated decision in LLM engineering: just cache it.",
-    body: `When I first launched SkipTheTerms, every request hit the Groq API fresh. Llama 3.3 70B, every time, for every user, for every document. Clean. Expensive. Stupid.
-
-The problem became obvious fast: Terms of Service documents don't change. The same GDPR policy gets read by hundreds of users. I was paying API credits to summarise an identical 5,000-word document dozens of times a day. Different users. Same document. Same result.
-
-The fix was two hours of work: hash the document content on arrival, check Supabase for an existing summary, return it if found, call the LLM if not, store the result. Cache hit rate hit 70% within the first week.
-
-Cost reduction: 40%. Latency on cache hits: 50ms vs ~3 seconds cold. User experience: the thing felt instant on the majority of requests.
-
-The broader point is that most LLM applications have natural caching surfaces — repeated queries, identical documents, common prompts — and most developers skip them entirely because they're thinking about model quality rather than call frequency.
-
-The uncomfortable truth: a worse model with a cache is often a better product than a better model without one. Your users probably cannot distinguish GPT-4o from Llama 3.3 70B on a summarisation task. They can absolutely tell the difference between 50ms and 3 seconds.
-
-Optimise for the experience, not the benchmark.`,
-    relatedProject: {
-      label: "SkipTheTerms",
-      href: "https://github.com/rrubayet321/skiptheterms",
-    },
+      "Repeated documents are an opportunity to avoid repeated work. A small lesson from building SkipTheTerms.",
+    body: [
+      "Model selection gets a lot of attention. Call frequency deserves some too. If different people request the same transformation of an unchanged document, generating the same answer repeatedly may be unnecessary.",
+      "SkipTheTerms uses a hash of the document content to identify that opportunity. The backend looks for an existing summary before making a new request. A changed document produces a different hash, so an old summary is not automatically reused for new content.",
+      "A cache also needs a definition of what makes two requests equivalent. The prompt, model, language, and output format can affect the answer. In a growing system, those choices belong in the cache identity or its invalidation rules.",
+      "This is not a claim that caching solves every AI workload. Personalized or time-sensitive requests need different treatment. The point is to look for the repeated work your specific product creates.",
+      "My default question now is simple: does this request need a new generation? Sometimes the better engineering decision is to return work the system has already done.",
+    ],
+    relatedProjectId: "skiptheterms",
   },
 ];
