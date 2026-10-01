@@ -5,7 +5,6 @@ import { SignatureArt } from "@/components/SignatureArt";
 import { Reveal } from "@/components/Reveal";
 import { ProjectCard } from "@/components/ProjectCard";
 import { AnalysisCard } from "@/components/AnalysisCard";
-import { CopyEmail } from "@/components/CopyEmail";
 import { BusinessFocus } from "@/components/BusinessFocus";
 import { featuredProjects } from "@/lib/projects";
 import { analyses } from "@/lib/analysis";
@@ -42,9 +41,9 @@ export default function Home() {
               <Link href="/projects" className="button">
                 Explore my work <Arrow />
               </Link>
-              <a href="#contact" className="hero-contact">
+              <Link href="/contact" className="hero-contact">
                 Let’s talk <Arrow diagonal />
-              </a>
+              </Link>
             </div>
             <p className="hero-location">
               {profile.location} <span aria-hidden="true">↗</span>
@@ -210,41 +209,23 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section
-        id="contact"
-        className="contact-section"
-        aria-labelledby="contact-heading"
-      >
-        <Reveal>
-          <p className="eyebrow">05 / Start a conversation</p>
-          <h2 id="contact-heading">
-            Have a problem
-            <br />
-            worth <span className="serif">solving?</span>
-          </h2>
-          <p className="contact-description">
-            Let’s turn it into software that moves your business forward.
-            <br className="desktop-break" /> A useful AI product starts with a
-            real need.
-          </p>
-          <CopyEmail />
-          <div className="contact-socials">
-            <a href={profile.github} target="_blank" rel="noopener noreferrer">
-              GitHub <Arrow diagonal />
-            </a>
-            <a
-              href={profile.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn <Arrow diagonal />
-            </a>
+      <Reveal>
+        <section
+          id="contact"
+          className="home-contact-link"
+          aria-labelledby="get-in-touch-heading"
+        >
+          <div>
+            <p className="eyebrow">05 / What’s next?</p>
+            <h2 id="get-in-touch-heading">
+              Something worth <span className="serif">building?</span>
+            </h2>
           </div>
-        </Reveal>
-        <span className="contact-asterisk" aria-hidden="true">
-          ✳
-        </span>
-      </section>
+          <Link href="/contact" className="text-link">
+            Let’s talk <Arrow diagonal />
+          </Link>
+        </section>
+      </Reveal>
     </div>
   );
 }

@@ -43,13 +43,14 @@ Motion includes staggered kanji entrances, an outline echo, path drawing, an RH 
 
 ## Pages
 
-- `/`: introduction, current work, business focus, selected projects, research, background, notes, contact.
+- `/`: introduction, current work, business focus, selected projects, research, background, notes, and a compact link to Contact.
 - `/projects`: three products linking to GitHub and a separate research collection.
 - `/projects/channelspy`, `/projects/skiptheterms`, `/projects/ummahspeaks`, `/projects/cmat`: retained case studies.
 - `/analysis` and the three original article URLs: notes.
 - `/photos`: native dialog, keyboard navigation, image-link fallback, focus restoration.
 - `/resume`: original PDF and direct open/download links; excluded from indexing.
-- `/about` and `/contact`: permanent redirects to homepage anchors.
+- `/contact`: the sole page for email, copy feedback, GitHub, and LinkedIn contact details. Header, homepage, notes, and footer contact links all point here.
+- `/about`: permanent redirect to the homepage background section. The older `/#contact` anchor still lands on the compact Contact link.
 
 ## Verification
 

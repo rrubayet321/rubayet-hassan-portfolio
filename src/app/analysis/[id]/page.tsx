@@ -73,7 +73,7 @@ export default async function NoteDetail({ params }: Props) {
           <Link href="/analysis" className="text-link">
             ← All notes
           </Link>
-          <Link href="/#contact" className="text-link">
+          <Link href="/contact" className="text-link">
             Continue the conversation <Arrow diagonal />
           </Link>
         </nav>

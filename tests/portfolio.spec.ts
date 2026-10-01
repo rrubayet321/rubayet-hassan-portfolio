@@ -3,6 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs/promises";
 const routes = [
   "/",
+  "/contact",
   "/projects",
   "/projects/channelspy",
   "/projects/skiptheterms",
@@ -86,6 +87,7 @@ test("responsive pages work at phone, tablet, desktop, and landscape sizes", asy
     await page.setViewportSize({ width, height });
     for (const route of [
       "/",
+      "/contact",
       "/projects",
       "/projects/cmat",
       "/analysis/llm-chrome-extension-ux",
@@ -128,10 +130,7 @@ test("redirects, anchor offsets, history, and unknown URLs", async ({
   page,
   request,
 }) => {
-  for (const [path, target] of [
-    ["/about", "/#about"],
-    ["/contact", "/#contact"],
-  ]) {
+  for (const [path, target] of [["/about", "/#about"]]) {
     const response = await request.get(path, { maxRedirects: 0 });
     expect(response.status()).toBe(308);
     expect(response.headers().location).toBe(target);
@@ -170,7 +169,7 @@ test("redirects, anchor offsets, history, and unknown URLs", async ({
       .getByRole("navigation", { name: "Main navigation" })
       .getByRole("link", { name: "Contact" })
       .click();
-    await expect(page).toHaveURL(/\/#contact$/);
+    await expect(page).toHaveURL(/\/contact$/);
     await page
       .getByRole("navigation", { name: "Main navigation" })
       .getByRole("link", { name: "Notes", exact: true })
@@ -233,7 +232,7 @@ test("email feedback reports success only after a successful write and handles d
       },
     });
   });
-  await page.goto("/#contact");
+  await page.goto("/contact");
   await page.getByRole("button", { name: "Copy email address" }).click();
   await expect(page.getByRole("status")).toContainText("Couldn’t copy");
   await expect(page.getByRole("status")).not.toContainText(
@@ -276,6 +275,7 @@ test("no-JavaScript pages keep core content, navigation, images, and direct acti
   await expect(
     page.getByRole("heading", { name: "Building StorageAtlas" }),
   ).toBeVisible();
+  await page.goto(base + "/contact", { waitUntil: "domcontentloaded" });
   await expect(page.locator(".email-link")).toHaveAttribute(
     "href",
     "mailto:rrubayet321@gmail.com",
@@ -429,6 +429,7 @@ test("accessible home, work, case studies, notes, photos, and dialog", async ({
   await page.emulateMedia({ reducedMotion: "reduce" });
   for (const route of [
     "/",
+    "/contact",
     "/projects",
     "/projects/cmat",
     "/analysis/llm-chrome-extension-ux",
@@ -607,6 +608,61 @@ test("business positioning, linked employer, direct GitHub projects, and finite 
   }
 });
 
+test("contact details live only on the dedicated page and all contact navigation agrees", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/");
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator('a[href*="linkedin.com"]')).toHaveCount(0);
+  await expect(page.locator(".copy-button")).toHaveCount(0);
+  const headerContact = page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("link", { name: "Contact" });
+  await expect(headerContact).toHaveAttribute("href", "/contact");
+  const footerContact = page
+    .getByRole("navigation", { name: "Footer navigation" })
+    .getByRole("link", { name: "Contact" });
+  await expect(footerContact).toHaveAttribute("href", "/contact");
+  await page
+    .locator(".home-contact-link")
+    .getByRole("link", { name: "Let’s talk" })
+    .click();
+  await expect(page).toHaveURL(/\/contact$/);
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(1);
+  await expect(
+    page.getByRole("button", { name: "Copy email address" }),
+  ).toHaveCount(1);
+  await expect(headerContact).toHaveAttribute("aria-current", "page");
+  await expect(
+    page.getByRole("link", { name: "LinkedIn", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    page
+      .getByRole("navigation", { name: "Footer navigation" })
+      .getByRole("link", { name: "LinkedIn" }),
+  ).toHaveCount(0);
+  const response = await request.get("/contact", { maxRedirects: 0 });
+  expect(response.status()).toBe(200);
+  expect(response.headers().location).toBeUndefined();
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://rubayethassan.com/contact",
+  );
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  expect(sitemap).toContain("/contact");
+  await page.goBack();
+  await expect(page).toHaveURL(/\/$/);
+  // Previously shared homepage anchors still land on the compact route into Contact.
+  await page.goto("/#contact");
+  await expect(page.locator(".home-contact-link")).toBeVisible();
+  await page
+    .locator(".home-contact-link")
+    .getByRole("link", { name: "Let’s talk" })
+    .click();
+  await expect(page).toHaveURL(/\/contact$/);
+});
+
 test("desktop and mobile visual delivery", async ({ page }, testInfo) => {
   test.skip(
     testInfo.project.name !== "chromium",
@@ -621,6 +677,7 @@ test("desktop and mobile visual delivery", async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height });
     for (const [slug, route] of [
       ["home", "/"],
+      ["contact", "/contact"],
       ["work", "/projects"],
       ["research", "/projects/cmat"],
       ["notes", "/analysis"],
@@ -634,10 +691,15 @@ test("desktop and mobile visual delivery", async ({ page }, testInfo) => {
         path: "artifacts/screenshots/" + name + "-" + slug + ".png",
         fullPage: true,
       });
-      if (slug === "home")
+      if (slug === "home") {
         await page.screenshot({
           path: "artifacts/screenshots/" + name + "-hero.png",
         });
+        await page.locator(".home-contact-link").scrollIntoViewIfNeeded();
+        await page.screenshot({
+          path: "artifacts/screenshots/" + name + "-home-end.png",
+        });
+      }
       if (slug === "photos") {
         await page.locator(".photo-card a").first().click();
         await page.waitForLoadState("networkidle");

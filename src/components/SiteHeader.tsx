@@ -27,7 +27,10 @@ export function SiteHeader() {
           >
             Notes
           </Link>
-          <Link href="/#contact">
+          <Link
+            href="/contact"
+            aria-current={pathname === "/contact" ? "page" : undefined}
+          >
             Contact <span aria-hidden="true">↗</span>
           </Link>
         </nav>

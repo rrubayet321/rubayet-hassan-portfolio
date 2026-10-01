@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Mark, Arrow } from "@/components/Mark";
-import { profile } from "@/lib/profile";
 export function SiteFooter() {
   return (
     <footer className="site-footer shell">
@@ -16,12 +15,9 @@ export function SiteFooter() {
           <Link href="/photos">
             Photos <Arrow diagonal />
           </Link>
-          <a href={profile.github} target="_blank" rel="noopener noreferrer">
-            GitHub <Arrow diagonal />
-          </a>
-          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
-            LinkedIn <Arrow diagonal />
-          </a>
+          <Link href="/contact">
+            Contact <Arrow diagonal />
+          </Link>
         </nav>
       </div>
       <div className="footer-bottom">

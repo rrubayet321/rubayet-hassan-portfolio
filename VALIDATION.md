@@ -1,6 +1,6 @@
 # Portfolio redesign — validation report
 
-Validated locally on 1 October 2026 after the typography, project presentation, business positioning, and motion revisions. Preview: [http://127.0.0.1:3001](http://127.0.0.1:3001).
+Validated locally on 1 October 2026 after the typography, project presentation, business positioning, motion revisions, and Contact consolidation. Preview: [http://127.0.0.1:3001](http://127.0.0.1:3001).
 
 ## Delivered
 
@@ -13,11 +13,12 @@ Validated locally on 1 October 2026 after the typography, project presentation, 
 - Retained the four case-study routes, three original article routes, research introduction, original C-MAT architecture figure, gallery, and resume.
 - New motion: staggered kanji entrances, outline echo, path drawing, RH stamp, pointer movement capped at 8px, drawn capability icons, section rules, once-only reveals, project arrows, and reading progress.
 - Entrances settle within five seconds; reduced motion disables movement and reading progress. No scroll hijacking. Server-rendered text and direct links work without JavaScript.
-- Compact visible navigation, anchor redirects, direct email, honest copy feedback, native photo dialog, preserved PDF open/download links.
+- Compact visible navigation, a single dedicated Contact page, direct email, honest copy feedback, native photo dialog, preserved PDF open/download links.
+- Removed full contact information from the homepage and repeated social links from the footer. Header, homepage, footer, and article contact links all point to `/contact`; the old `/#contact` anchor lands on a compact link to that page.
 - Updated metadata and social preview; retained favicon, sitemap, robots, 404, and error boundaries.
 - Studied [Shayaan Azeem's site](https://www.shayaanazeem.com/) visually for its direct introduction, inline current-work context, and concise project descriptions. The dark palette and Japanese typography retain this portfolio's own identity.
 
-The redesign was developed and validated locally. GitHub publication was explicitly authorized by the user after review.
+The redesign and Contact cleanup were developed and validated locally. GitHub publication of each change was explicitly authorized by the user after review.
 
 ## Build and automated checks
 
@@ -27,17 +28,19 @@ The redesign was developed and validated locally. GitHub publication was explici
 | TypeScript | Pass |
 | Production build | Pass, 20 prerendered/static route outputs |
 | Git diff whitespace check | Pass |
-| Playwright | 49 passed, 0 failed, 2 intentionally skipped, 43.3 seconds |
-| axe WCAG 2 A/AA, 2.1 AA, 2.2 AA checks | No detected violations in 24 page/dialog scans |
+| Playwright | 52 passed, 0 failed, 2 intentionally skipped, 40.8 seconds |
+| axe WCAG 2 A/AA, 2.1 AA, 2.2 AA checks | No detected violations in 27 page/dialog scans |
 
-The 16 functional scenarios passed in each of Chromium, Firefox, and WebKit. The additional delivery-capture scenario runs in Chromium; the two skips omit duplicate screenshot generation in the other engines.
+The 17 functional scenarios passed in each of Chromium, Firefox, and WebKit. The additional delivery-capture scenario runs in Chromium; the two skips omit duplicate screenshot generation in the other engines.
+
+After the final text-spacing and decorative-position adjustments, the production build passed again. Contact navigation, clipboard feedback, and refreshed delivery captures passed a focused rerun: 7 passed, 0 failed, 2 duplicate-capture skips, 10.2 seconds. The full-suite report above is preserved.
 
 Engines: Chromium 153, Firefox 155, WebKit 26.6. These are local engine checks, not tests on physical phones or every operating system.
 
 ### Coverage
 
-- All 12 content routes: homepage, work, four case studies, notes, three articles, photos, resume.
-- Permanent redirects and sticky-header offsets; unknown top-level/project/article URLs; repeated navigation and browser back/forward.
+- All 13 content routes: homepage, Contact, work, four case studies, notes, three articles, photos, resume.
+- The About redirect and sticky-header offsets; unknown top-level/project/article URLs; repeated navigation and browser back/forward.
 - Discovered internal links, sitemap, robots, favicon, social preview, photo files, and resume PDF.
 - Layouts at 320×568, 375×812, 390×844, 768×1024, 1024×768, 1440×1000, and 844×390.
 - No horizontal overflow, two project columns from 768px, visible mobile navigation, header targets at least 44×44px.
@@ -51,16 +54,17 @@ Engines: Chromium 153, Firefox 155, WebKit 26.6. These are local engine checks, 
 - Clipboard success and denial, with no false success feedback.
 - Actual PDF download, independently of the embedded viewer.
 - Correct business copy, employer URL, product GitHub destinations, and animation durations/iteration counts.
+- Contact exists as a normal 200 page, with a matching canonical URL and sitemap entry. Email, copy action, and profile links appear once there and no longer appear on the homepage or footer. All contact entry points and the old homepage anchor lead to the same destination.
 - Actual product-title navigation to a GitHub URL, intercepted locally in the test rather than depending on a third-party service.
 - No detected hydration warnings, uncaught runtime errors, failed ordinary requests, or broken internal links.
 
-Accessibility scans cover home, work, C-MAT, a note, gallery, resume, 404, and the open photo dialog in all three engines. Shared article/case-study templates also receive route/content/runtime checks.
+Accessibility scans cover home, Contact, work, C-MAT, a note, gallery, resume, 404, and the open photo dialog in all three engines. Shared article/case-study templates also receive route/content/runtime checks.
 
 Error boundaries compile; deliberate server failures were not injected. Clipboard outcomes use controlled implementations rather than altering the user's clipboard or permissions. External service availability is not guaranteed by these tests.
 
 ## Mobile Lighthouse results
 
-Final production-build audit, default simulated mobile profile:
+Recorded before the Contact consolidation, using the default simulated mobile profile. These performance results are retained for reference and have not been rerun for this small navigation/content change:
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP | Blocking time | Layout shift |
 | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
@@ -87,6 +91,8 @@ Desktop: 1440×1000. Mobile: 390×844. Captures use reduced motion after fonts a
 | --- | --- | --- |
 | Introduction | [Desktop](artifacts/screenshots/desktop-hero.png) | [Mobile](artifacts/screenshots/mobile-hero.png) |
 | Full homepage | [Desktop](artifacts/screenshots/desktop-home.png) | [Mobile](artifacts/screenshots/mobile-home.png) |
+| Homepage ending | [Desktop](artifacts/screenshots/desktop-home-end.png) | [Mobile](artifacts/screenshots/mobile-home-end.png) |
+| Contact | [Desktop](artifacts/screenshots/desktop-contact.png) | [Mobile](artifacts/screenshots/mobile-contact.png) |
 | Work | [Desktop](artifacts/screenshots/desktop-work.png) | [Mobile](artifacts/screenshots/mobile-work.png) |
 | Research | [Desktop](artifacts/screenshots/desktop-research.png) | [Mobile](artifacts/screenshots/mobile-research.png) |
 | Notes | [Desktop](artifacts/screenshots/desktop-notes.png) | [Mobile](artifacts/screenshots/mobile-notes.png) |

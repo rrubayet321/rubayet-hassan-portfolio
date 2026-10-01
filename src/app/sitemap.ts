@@ -5,7 +5,7 @@ import { projects } from "@/lib/projects";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl, priority: 1 },
-    ...["/projects", "/analysis", "/photos"].map((path) => ({
+    ...["/projects", "/analysis", "/photos", "/contact"].map((path) => ({
       url: siteUrl + path,
       priority: 0.8,
     })),
